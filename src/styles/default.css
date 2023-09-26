@@ -1,0 +1,95 @@
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-Light.woff");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-Regular.woff");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-Medium.woff");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter-SemiBold.woff");
+  font-weight: 600;
+}
+
+:root {
+  --aispp-color-blue: #0290ff;
+  --aispp-color-dark-blue: #36476c;
+  --aispp-color-gray: #a8b1b8;
+  --aispp-color-white: #ffffff;
+  --aispp-color-white-dark: #fafbfc;
+  --aispp-color-light-dark: #263238;
+  --aispp-color-light-icons: #979797;
+  --aispp-color-light-checkbox: #dadada;
+  --aispp-color-light-label: #89a0b2;
+  --aispp-color-button-disabled: #b5c4d9;
+  --aispp-color-light-red: #ce4016;
+}
+
+html {
+  height: 100%;
+}
+body {
+  min-height: 38px;
+  height: 100%;
+  line-height: normal;
+  font-family: "Inter";
+  font-style: normal;
+  color: #36476c;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font-family: "Inter";
+}
+button {
+  background: none;
+  display: flex;
+}
+input::placeholder {
+  color: #a8b1b8;
+  font-size: 18px;
+  font-weight: 500;
+  user-select: none;
+}
+input[type="date"] {
+  color: #36476c;
+  font-weight: 700;
+}
+input[type="date"]::placeholder {
+  color: #a8b1b8;
+}
+input::-webkit-input-placeholder {
+  color: #a8b1b8;
+  font-size: 18px;
+  font-weight: 500;
+}
+input::-moz-placeholder {
+  color: #a8b1b8;
+  font-size: 18px;
+  font-weight: 500;
+} /* Firefox 19+ */
+input:-moz-placeholder {
+  color: #a8b1b8;
+  font-size: 18px;
+  font-weight: 500;
+} /* Firefox 18- */
+input:-ms-input-placeholder {
+  color: #a8b1b8;
+  font-size: 18px;
+  font-weight: 500;
+}
+input:disabled {
+  background: rgba(223, 224, 225, 1);
+}

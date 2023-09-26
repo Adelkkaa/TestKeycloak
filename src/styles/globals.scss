@@ -1,0 +1,50 @@
+@import "./default.css";
+@import "./normalize.css";
+
+.AISPP__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1730px;
+  padding: 45px 35px 11px 24px;
+}
+
+.AISPP__header_mainLogo {
+  display: flex;
+  align-items: center;
+  gap: 31px;
+}
+
+.AISPP__header_links {
+  display: flex;
+  gap: 75px;
+  color: var(--aispp-color-dark-blue);
+}
+
+.AISPP_mainLogo__systemName {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--aispp-color-dark-blue);
+  cursor: pointer;
+}
+
+.AISPP_links-registry,
+.AISPP_links-auth {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--aispp-color-dark-blue);
+  cursor: pointer;
+}
+.AISPP_UI_commonMain {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.AISPP_UI_main {
+  margin: auto;
+  width: 95%;
+  flex: 1;
+  position: relative;
+}

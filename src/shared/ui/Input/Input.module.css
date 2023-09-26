@@ -1,0 +1,62 @@
+.input {
+  width: 100%;
+  height: 71px;
+  border-radius: 5px;
+  border: 1px var(--aispp-color-gray) solid;
+  padding: 12px 12px 12px 55px;
+  font-size: 18px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+}
+
+.input:autofill {
+  z-index: 0;
+}
+
+.input:focus,
+.input:hover,
+.inputActive {
+  border: 1px var(--aispp-color-blue) solid;
+}
+
+.input:focus + .iconWrapper svg,
+.input:hover + .iconWrapper svg,
+.inputActive + .iconWrapper svg {
+  fill: var(--aispp-color-blue);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.iconWrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 12px;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: 33px;
+  height: 33px;
+  user-select: none;
+}
+
+.inputLabel {
+  color: var(--aispp-color-light-label);
+  font-size: 15px;
+  font-weight: 400;
+  width: 100%;
+}
+
+.inputError {
+  width: 100%;
+  color: var(--aispp-color-light-red);
+  font-size: 15px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}

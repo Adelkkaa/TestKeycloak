@@ -1,0 +1,53 @@
+.customCheckboxWrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.customCheckboxWrapper:hover > label::before {
+  border: 2px solid var(--aispp-color-blue);
+}
+.customCheckbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.customCheckbox + label {
+  display: inline-flex;
+  align-items: center;
+  color: var(--aispp-color-light-icons);
+  font-size: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
+}
+.customCheckbox + label::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 2px solid var(--aispp-color-light-icons);
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.customCheckbox:checked + label::before {
+  border-color: var(--aispp-color-blue);
+  background-color: var(--aispp-color-blue);
+}
+
+.customCheckbox:checked + label::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 2px;
+  width: 8px;
+  height: 16px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}

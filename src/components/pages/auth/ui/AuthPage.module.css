@@ -1,0 +1,36 @@
+.authWrapper {
+  width: 499px;
+  display: flex;
+  flex-direction: column;
+  margin: 100px auto 0 auto;
+}
+.authTitle {
+  font-size: 48px;
+  font-weight: 500;
+}
+
+.authForm {
+  margin-top: 87px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.authConfirmWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.authLinksWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.authRegistry,
+.authForgot {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--aispp-color-dark-blue);
+}
