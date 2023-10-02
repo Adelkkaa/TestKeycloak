@@ -1,15 +1,17 @@
 import clsx from "clsx";
-import React from "react";
+import React, { ReactNode } from "react";
 
 import classes from "./Button.module.css";
 
 type ButtonProps = {
   className?: string;
+  icon?: ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button: React.FC<ButtonProps> = ({
   className,
   disabled,
+  icon,
   children,
   ...otherProps
 }) => {
@@ -21,6 +23,7 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       {...otherProps}
     >
+      {icon && icon}
       {children}
     </button>
   );
