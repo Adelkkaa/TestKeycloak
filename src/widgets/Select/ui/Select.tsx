@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import classes from "./Select.module.css";
 import clsx from "clsx";
+import useComponentVisible from "./useComponentVisible";
 
 export type SelectOption = {
   label: string;
@@ -24,9 +25,11 @@ type SelectProps = {
 } & (SingleSelectProps | MultipleSelectProps);
 
 export function Select({ multiple, value, onChange, options }: SelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [inputValue, setInputValue] = useState("");
+  const { containerRef, isOpen, setIsOpen } = useComponentVisible(false);
+  const dropdownRef = useRef<HTMLUListElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function clearOptions() {
     multiple ? onChange([]) : onChange(undefined);
@@ -47,22 +50,43 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     [multiple, onChange, value]
   );
 
-  function isOptionSelected(option: SelectOption) {
-    return multiple ? value.includes(option) : option === value;
-  }
+  const isOptionSelected = useCallback(
+    (option: SelectOption) => {
+      return multiple ? value.includes(option) : option === value;
+    },
+    [multiple, value]
+  );
 
-  useEffect(() => {
-    if (isOpen) setHighlightedIndex(0);
-  }, [isOpen]);
+  const filterCallback = useCallback(
+    (option: SelectOption) =>
+      multiple
+        ? !isOptionSelected(option) &&
+          option.label.toLowerCase().includes(inputValue.toLowerCase())
+        : option.label.toLowerCase().includes(inputValue.toLowerCase()),
+    [inputValue, isOptionSelected, multiple]
+  );
+  const filterOptions = useMemo(
+    () => options.filter(filterCallback),
+    [options, filterCallback]
+  );
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.target != containerRef.current) return;
+      if (e.target != inputRef.current && e.target != containerRef.current)
+        return;
+
       switch (e.code) {
         case "Enter":
-        case "Space":
-          setIsOpen((prev) => !prev);
-          if (isOpen) selectOption(options[highlightedIndex]);
+          multiple ? setIsOpen(true) : setIsOpen(false);
+          if (
+            isOpen &&
+            filterOptions.length > 0 &&
+            ((multiple && value.length < options.length) || !multiple)
+          ) {
+            selectOption(filterOptions[highlightedIndex]);
+            setInputValue("");
+            setHighlightedIndex(0);
+          }
           break;
         case "ArrowUp":
         case "ArrowDown": {
@@ -72,9 +96,13 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
           }
 
           const newValue = highlightedIndex + (e.code === "ArrowDown" ? 1 : -1);
-          if (newValue >= 0 && newValue < options.length) {
+          if (
+            newValue >= 0 &&
+            newValue < options.filter(filterCallback).length
+          ) {
             setHighlightedIndex(newValue);
           }
+
           break;
         }
         case "Escape":
@@ -84,39 +112,83 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     };
     containerRef.current?.addEventListener("keydown", handler);
 
+    if (isOpen && dropdownRef.current && highlightedIndex > -1) {
+      const dropdownMenu = dropdownRef.current;
+      const dropdownItems = dropdownMenu.querySelectorAll("li");
+      if (dropdownItems && dropdownItems[highlightedIndex]) {
+        dropdownItems[highlightedIndex].scrollIntoView({
+          block: "nearest",
+        });
+      }
+    }
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       containerRef.current?.removeEventListener("keydown", handler);
     };
-  }, [isOpen, highlightedIndex, options, selectOption]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, highlightedIndex, selectOption, options, filterCallback]);
 
   return (
     <div
       ref={containerRef}
-      onBlur={() => setIsOpen(false)}
-      onClick={() => setIsOpen((prev) => !prev)}
       tabIndex={0}
+      onClick={() => {
+        inputRef?.current?.focus();
+        setIsOpen((prev) => !prev);
+      }}
       className={classes.container}
     >
       <span className={classes.value}>
-        {multiple
-          ? value.map((v) => (
-              <button
-                key={v.value}
+        {multiple ? (
+          value.map((v) => (
+            <button key={v.value} className={classes["option-badge"]}>
+              {v.label}
+              <span
                 onClick={(e) => {
                   e.stopPropagation();
+                  inputRef?.current?.focus();
                   selectOption(v);
                 }}
-                className={classes["option-badge"]}
+                className={classes["remove-btn"]}
               >
-                {v.label}
-                <span className={classes["remove-btn"]}>&times;</span>
-              </button>
-            ))
-          : value?.label}
+                &times;
+              </span>
+            </button>
+          ))
+        ) : (
+          <>
+            <input
+              ref={inputRef}
+              className={classes["option-input"]}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                setHighlightedIndex(0);
+              }}
+            />
+            <p className={classes["option-current"]}>
+              {!inputValue && value?.label}
+            </p>
+          </>
+        )}
+        {multiple && (
+          <input
+            className={classes["option-input"]}
+            ref={inputRef}
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              setHighlightedIndex(0);
+            }}
+          />
+        )}
       </span>
+
       <button
         onClick={(e) => {
           e.stopPropagation();
+          inputRef?.current?.focus();
+
           clearOptions();
         }}
         className={clsx(classes["clear-btn__hidden"], {
@@ -129,15 +201,19 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
         &times;
       </button>
       <div className={classes.caret}></div>
-      <ul className={`${classes.options} ${isOpen ? classes.show : ""}`}>
-        {options
-          .filter((option) => (multiple ? !isOptionSelected(option) : true))
-          .map((option, index) => (
+      <ul
+        ref={dropdownRef}
+        className={`${classes.options} ${isOpen ? classes.show : ""}`}
+      >
+        {filterOptions.length > 0 ? (
+          filterOptions.map((option, index) => (
             <li
               onClick={(e) => {
                 e.stopPropagation();
                 selectOption(option);
-                setIsOpen(false);
+                setInputValue("");
+                inputRef?.current?.focus();
+                !multiple && setIsOpen(false);
               }}
               onMouseEnter={() => setHighlightedIndex(index)}
               key={option.value}
@@ -147,7 +223,10 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
             >
               {option.label}
             </li>
-          ))}
+          ))
+        ) : (
+          <p>Ничего не найдено...</p>
+        )}
       </ul>
     </div>
   );
