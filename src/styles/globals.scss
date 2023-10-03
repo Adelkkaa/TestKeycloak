@@ -48,3 +48,77 @@
   flex: 1;
   position: relative;
 }
+
+/* Table */
+.AISPP_UI_table {
+  // border: 1px solid #dfe0e1;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 700;
+  height: 100%;
+  border-spacing: 0px;
+  position: relative;
+  overflow: auto;
+  display: block;
+}
+.AISPP_UI_table .AISPP_UI_table_thead {
+  width: 100%;
+  display: block;
+  position: sticky;
+  top: 0;
+  background: white;
+  // padding-top: 6px;
+  z-index: 9;
+}
+.AISPP_UI_table .AISPP_UI_table_tbody {
+  display: block;
+  margin-top: 6px;
+}
+// .AISPP_UI_table_tbody .AISPP_UI_table_tr:not(:last-child) {
+//   margin-bottom: 6px;
+// }
+.AISPP_UI_table .AISPP_UI_table_thead .AISPP_UI_table_tr,
+.AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr {
+  display: grid;
+  grid-column-gap: 6px;
+  min-height: 47px;
+  border-bottom: 1px solid #b5c4d9;
+}
+.AISPP_UI_table .AISPP_UI_table_thead .AISPP_UI_table_td {
+  background: #f0f2f7;
+  // border-radius: 10px;
+}
+// .AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr {
+//   border: 1px solid transparent;
+// }
+.AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr:hover {
+  background: rgba(223, 224, 225, 0.4);
+  // border-radius: 10px;
+}
+.AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr:hover > :first-child {
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+.AISPP_UI_table .AISPP_UI_table_td {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-right: 1px solid #b5c4d9;
+}
+.AISPP_UI_table .AISPP_UI_table_td[disabled] {
+  background: #dfe0e1;
+  border-radius: 10px;
+}
+.AISPP_UI_emptyTable_tr {
+  color: #a8b1b8;
+  text-align: center;
+  padding: 13px 0px;
+  font-weight: 700;
+  font-size: 16px;
+  display: block;
+}
+/* ------ */
