@@ -47,6 +47,18 @@ body {
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: #b5c4d9;
+  border-radius: 100px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--aispp-color-blue);
+  border-radius: 100px;
+}
 input,
 button,
 textarea,

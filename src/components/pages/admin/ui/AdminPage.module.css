@@ -1,18 +1,8 @@
-.resetIconWrapper {
-  width: 19px;
-  height: 13.5px;
+.adminPage {
+  display: flex;
+  justify-content: flex-end;
 }
-.applyIconWrapper {
-  width: 21px;
-  height: 21px;
-}
-.resetButton,
-.applyButton {
-  width: 159px;
-  height: 41px;
-  padding: 11px 28px;
-}
-
-.applyButton {
-  padding: 10px;
+.adminPageTable {
+  width: 100%;
+  flex: 1;
 }

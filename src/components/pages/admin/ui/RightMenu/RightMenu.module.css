@@ -1,0 +1,67 @@
+.resetIconWrapper {
+  width: 19px;
+  height: 13.5px;
+}
+.applyIconWrapper {
+  width: 21px;
+  height: 21px;
+}
+.resetButton,
+.applyButton {
+  width: 159px;
+  height: 41px;
+  padding: 11px 28px;
+}
+
+.applyButton {
+  padding: 10px;
+}
+
+.rightMenu {
+  position: relative;
+  width: 0px;
+  height: 646px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #f0f2f7;
+  padding: 58px 41px 114px;
+  transition: 0.2s ease-in-out;
+}
+
+.rightMenu-open {
+  width: 424px;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.caret {
+  cursor: pointer;
+  position: absolute;
+  top: 16px;
+  left: 19px;
+  transform: rotate(90deg);
+  border: 12px solid transparent;
+  border-top-color: var(--aispp-color-gray);
+  transition: 0.1s ease-in-out;
+}
+
+.caret-open {
+  transform: rotate(270deg);
+  transition: 0.1s ease-in-out;
+}
