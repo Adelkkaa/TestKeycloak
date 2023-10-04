@@ -51,8 +51,7 @@
 
 /* Table */
 .AISPP_UI_table {
-  // border: 1px solid #dfe0e1;
-  border-radius: 10px;
+  border-radius: 10px 10px 0px 10px;
   width: 100%;
   font-size: 16px;
   font-weight: 700;
@@ -68,33 +67,27 @@
   position: sticky;
   top: 0;
   background: white;
-  // padding-top: 6px;
   z-index: 9;
 }
 .AISPP_UI_table .AISPP_UI_table_tbody {
   display: block;
-  margin-top: 6px;
+  background-color: var(--aispp-color-white-table);
 }
-// .AISPP_UI_table_tbody .AISPP_UI_table_tr:not(:last-child) {
-//   margin-bottom: 6px;
-// }
+
 .AISPP_UI_table .AISPP_UI_table_thead .AISPP_UI_table_tr,
 .AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr {
   display: grid;
-  grid-column-gap: 6px;
   min-height: 47px;
-  border-bottom: 1px solid #b5c4d9;
+  border-bottom: 1px solid var(--aispp-color-button-disabled);
 }
 .AISPP_UI_table .AISPP_UI_table_thead .AISPP_UI_table_td {
-  background: #f0f2f7;
-  // border-radius: 10px;
+  background: var(--aispp-color-dark-blue);
+  color: var(--aispp-color-white);
+  font-size: 15px;
+  font-weight: 500;
 }
-// .AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr {
-//   border: 1px solid transparent;
-// }
 .AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr:hover {
   background: rgba(223, 224, 225, 0.4);
-  // border-radius: 10px;
 }
 .AISPP_UI_table .AISPP_UI_table_tbody .AISPP_UI_table_tr:hover > :first-child {
   cursor: pointer;
@@ -107,7 +100,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  border-right: 1px solid #b5c4d9;
+  font-size: 11px;
+  font-weight: 500;
+}
+.AISPP_UI_table .AISPP_UI_table_td:not(:last-child) {
+  border-right: 1px solid var(--aispp-color-button-disabled);
 }
 .AISPP_UI_table .AISPP_UI_table_td[disabled] {
   background: #dfe0e1;
@@ -120,5 +117,79 @@
   font-weight: 700;
   font-size: 16px;
   display: block;
+}
+/* ------ */
+
+/* Select */
+.AISPP_selectBlock {
+  position: relative;
+}
+.AISPP_selectBlock__input {
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--aispp-color-gray);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  outline: none;
+  border-radius: 10px !important;
+
+  font-size: 15px;
+  font-weight: 400;
+}
+.AISPP_selectBlock__input:hover {
+  border-color: var(--aispp-color-blue) !important;
+}
+.AISPP_selectBlock__valueContainer {
+  padding: 2px 12px !important;
+}
+.AISPP_selectBlock__singleValue {
+  color: #36476c !important;
+}
+.AISPP_selectBlock__placeholder {
+  color: #a8b1b8 !important;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  svg {
+    margin-right: 10px;
+  }
+}
+.AISPP_selectBlock__options {
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  z-index: 9999 !important;
+}
+.AISPP_selectBlock__optionsList {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  border-radius: 10px;
+}
+.AISPP_selectBlock__optionsItem {
+  background: var(--aispp-color-white) !important;
+  border: 1px solid var(--kipariss-color-pantone427);
+  backdrop-filter: blur(4px);
+  padding: 12px 0px 12px 14px !important;
+  cursor: pointer !important;
+  font-weight: 400;
+  font-size: 15px !important;
+}
+.AISPP_selectBlock__optionsList > .AISPP_selectBlock__optionsItem:first-child {
+  border-radius: 10px 10px 0px 0px;
+}
+.AISPP_selectBlock__optionsList > .AISPP_selectBlock__optionsItem:last-child {
+  border-radius: 0px 0px 10px 10px;
+}
+.AISPP_selectBlock__optionsItemActive {
+  background-color: hsl(200, 100%, 70%) !important;
+  color: var(--aispp-color-white) !important;
+}
+.AISPP_selectBlock__optionsItemFocus {
+  background: hsl(200, 100%, 50%) !important;
+  color: var(--aispp-color-white) !important;
+  border-color: var(--aispp-color-button-disabled);
+  z-index: 9;
+  position: relative;
 }
 /* ------ */

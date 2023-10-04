@@ -21,9 +21,6 @@ export const Header = () => {
         </div>
       </Link>
       <div className="AISPP__header_links">
-        <Link className="AISPP_links-registry" href={"/registry"}>
-          РЕГИСТРАЦИЯ
-        </Link>
         <div onClick={() => signIn("keycloak")}>Кейклок</div>
         <Link className="AISPP_links-auth" href={"/auth"}>
           ВОЙТИ

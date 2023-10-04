@@ -1,0 +1,33 @@
+.adminTableBlock {
+  height: 80vh;
+  position: relative;
+}
+.adminTableBlock tr {
+  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 2fr 1fr;
+}
+
+.checkbox + label::before {
+  content: "";
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 1px solid var(--aispp-color-light-icons);
+  border-radius: 2px;
+  margin-right: 5px;
+}
+
+.checkbox:checked + label::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+}

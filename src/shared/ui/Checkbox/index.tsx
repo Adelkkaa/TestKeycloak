@@ -1,7 +1,17 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import classes from "./Checkbox.module.css";
+import clsx from "clsx";
 
-export const Checkbox = () => {
+type CheckboxProps = {
+  withLabel?: boolean;
+  id?: string;
+  classname?: string;
+};
+export const Checkbox: FC<CheckboxProps> = ({
+  classname,
+  id,
+  withLabel = false,
+}) => {
   const [checked, setChecked] = useState(false);
   return (
     <div className={classes.customCheckboxWrapper}>
@@ -9,11 +19,11 @@ export const Checkbox = () => {
         checked={checked}
         onChange={() => setChecked((prev) => !prev)}
         type="checkbox"
-        className={classes.customCheckbox}
-        id="checkbox"
-        name="checkbox"
+        className={clsx(classes.customCheckbox, classname)}
+        id={id || "checkbox"}
+        name={id || "checkbox"}
       />
-      <label htmlFor="checkbox">Запомнить меня</label>
+      <label htmlFor={id || "checkbox"}>{withLabel && "Запомнить меня"}</label>
     </div>
   );
 };
