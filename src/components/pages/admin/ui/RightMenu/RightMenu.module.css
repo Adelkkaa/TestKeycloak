@@ -14,6 +14,10 @@
   transition: 0.5s ease-in-out;
 }
 
+.resetButton {
+  background-color: var(--aispp-color-button-disabled);
+}
+
 .applyButton {
   padding: 10px;
 }

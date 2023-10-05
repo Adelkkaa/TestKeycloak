@@ -1,27 +1,19 @@
-import React, { useCallback, useState } from "react";
+import React, { FC, useState } from "react";
 
 import { Button } from "@/shared/ui/Button";
-import { Select as CustomSelect } from "@/widgets/Select";
 import { ResetIcon } from "../../icons/ResetIcon";
 import { ApplyIcon } from "../../icons/ApplyIcon";
-// import { SelectOption } from "@/widgets/Select/ui/Select";
 
 import classes from "./RightMenu.module.css";
 import clsx from "clsx";
-import Select, { GetOptionLabel, GetOptionValue } from "react-select";
-
-const options = [
-  { value: "1", label: "First" },
-  { value: "2", label: "Second" },
-  { value: "3", label: "Third" },
-  { value: "4", label: "Fourth" },
-  { value: "5", label: "Fifth" },
-];
-
-type SelectOption = {
-  label: string;
-  value: string;
-};
+import Select, { MultiValue, SingleValue } from "react-select";
+import {
+  Employee,
+  Managament,
+  SelectOption,
+  SelectedFilters,
+} from "../../mockData";
+import { convertedMockData } from "../AdminPage";
 
 const selectClassNames = {
   control: () => "AISPP_selectBlock__input",
@@ -44,12 +36,26 @@ const selectClassNames = {
       isFocused && "AISPP_selectBlock__optionsItemFocus"
     ),
 };
-export const RightMenu = () => {
+
+type RightMenuProps = {
+  selectableFilters: SelectedFilters;
+  changeSelectableFilters: (
+    objKey: "managament" | "employee" | "registration" | "email",
+    arg:
+      | MultiValue<Managament>
+      | MultiValue<Employee>
+      | SingleValue<SelectOption>
+  ) => void;
+  onApplyFilterFunction: () => void;
+  onClearFilterFunction: () => void;
+};
+export const RightMenu: FC<RightMenuProps> = ({
+  selectableFilters,
+  changeSelectableFilters,
+  onApplyFilterFunction,
+  onClearFilterFunction,
+}) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [value1, setValue1] = useState<SelectOption[]>([]);
-  const [value2, setValue2] = useState<SelectOption[]>();
-  const [value3, setValue3] = useState<SelectOption[]>();
-  const [value4, setValue4] = useState<SelectOption | undefined>();
 
   return (
     <div
@@ -70,20 +76,47 @@ export const RightMenu = () => {
               <p className={classes.filters__title}>Управление</p>
               <div>
                 <Select
-                  name="upravlenie"
-                  id="upravlenie"
-                  instanceId={"upravlenie"}
+                  name="managamentId"
+                  id="managamentId"
+                  instanceId="managamentId"
                   isMulti
                   placeholder="Выберите управление"
-                  options={options}
-                  value={value1}
+                  options={convertedMockData.ManagamentList}
+                  getOptionLabel={(option: Managament) => option.managamentName}
+                  getOptionValue={(option: Managament) =>
+                    String(option.managamentId)
+                  }
+                  value={selectableFilters.managament || []}
                   noOptionsMessage={() => "Ничего не выбрано"}
                   onChange={(value) => {
-                    if (!value) {
-                      return;
-                    } else if (Array.isArray(value)) {
-                      setValue1(value);
-                    }
+                    changeSelectableFilters("managament", value);
+                  }}
+                  classNames={selectClassNames}
+                  closeMenuOnSelect={false}
+                />
+              </div>
+            </div>
+
+            <div className={classes.filters__item}>
+              <p className={classes.filters__title}>Сотрудник</p>
+              <div>
+                <Select
+                  name="employee"
+                  id="employee"
+                  instanceId="employee"
+                  isMulti
+                  placeholder="Выберите фамилию сотрудника"
+                  options={convertedMockData.EmployeeList}
+                  getOptionLabel={(option: Employee) =>
+                    `${option.employeeSurname} ${option.employeeName} ${option.employeePatronymic}`
+                  }
+                  getOptionValue={(option: Employee) =>
+                    String(option.employeeId)
+                  }
+                  value={selectableFilters.employee || []}
+                  noOptionsMessage={() => "Ничего не выбрано"}
+                  onChange={(value) => {
+                    changeSelectableFilters("employee", value);
                   }}
                   classNames={selectClassNames}
                   closeMenuOnSelect={false}
@@ -95,72 +128,61 @@ export const RightMenu = () => {
               <p className={classes.filters__title}>Регистрация</p>
               <div>
                 <Select
-                  hideSelectedOptions={false}
-                  name="status"
-                  id="status"
-                  instanceId={"status"}
-                  placeholder="Статус регистрации"
-                  options={options}
-                  value={value4}
+                  name="registration"
+                  id="registration"
+                  instanceId="registration"
+                  placeholder="Выберите статус регистрации"
+                  options={[
+                    { value: true, label: "Зарегистрирован" },
+                    { value: false, label: "Не зарегистрирован" },
+                  ]}
+                  value={selectableFilters.registration || []}
                   noOptionsMessage={() => "Ничего не выбрано"}
                   onChange={(value) => {
-                    value && setValue4(value);
+                    changeSelectableFilters("registration", value);
                   }}
                   classNames={selectClassNames}
-                  closeMenuOnSelect={false}
                 />
               </div>
             </div>
 
-            {/* <CustomSelect
-              multiple
-              options={options.map((item) => ({
-                    label: item.subtitle,
-                    value: item.title,
-                  }))}
-              value={value1 || []}
-              onChange={(o) => setValue1(o)}
-              placeholder="Выберите управление"
-              label="Управление"
-            /> */}
-            {/* <CustomSelect
-              multiple
-              options={options}
-              value={value2 || []}
-              onChange={(o) => setValue2(o)}
-              placeholder="Выберите фамилию сотрудника"
-              label="Сотрудник"
-            />
-            <CustomSelect
-              multiple
-              options={options}
-              value={value3 || []}
-              onChange={(o) => setValue3(o)}
-              placeholder="Выберите статус регистрации"
-              label="Регистрация"
-            />
-            <CustomSelect
-              options={options}
-              value={value4}
-              onChange={(o) => setValue4(o)}
-              placeholder="Выберите статус регистрации"
-              label="Регистрация"
-            /> */}
+            <div className={classes.filters__item}>
+              <p className={classes.filters__title}>Email</p>
+              <div>
+                <Select
+                  name="email"
+                  id="email"
+                  instanceId="email"
+                  placeholder="Выберите статус наличие email"
+                  options={[
+                    { value: true, label: "Есть" },
+                    { value: false, label: "Нет" },
+                  ]}
+                  value={selectableFilters.email || []}
+                  noOptionsMessage={() => "Ничего не выбрано"}
+                  onChange={(value) => {
+                    changeSelectableFilters("email", value);
+                  }}
+                  classNames={selectClassNames}
+                />
+              </div>
+            </div>
           </div>
 
           <div className={classes.buttonWrapper}>
             <Button
+              onClick={onClearFilterFunction}
               icon={
                 <div className={classes.resetIconWrapper}>
                   <ResetIcon />
                 </div>
               }
               className={classes.resetButton}
-              disabled
             >
               Сбросить
             </Button>
             <Button
+              onClick={onApplyFilterFunction}
               icon={
                 <div className={classes.applyIconWrapper}>
                   <ApplyIcon />
