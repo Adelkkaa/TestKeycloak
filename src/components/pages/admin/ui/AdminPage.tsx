@@ -76,6 +76,8 @@ export const AdminPage = () => {
   //       : undefined,
   // };
 
+  // Создал строчку над формой, ибо уже слил в прошлый мр)))
+
   const formDataSelected = {
     managament:
       Array.isArray(router.query.managament) &&
