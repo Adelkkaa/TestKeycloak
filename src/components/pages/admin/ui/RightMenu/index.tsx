@@ -7,13 +7,13 @@ import { ApplyIcon } from "../../icons/ApplyIcon";
 import classes from "./RightMenu.module.css";
 import clsx from "clsx";
 import Select, { MultiValue, SingleValue } from "react-select";
+import { Employee, Managament } from "../../mockData";
 import {
-  Employee,
-  Managament,
   SelectOption,
+  SelectableFilters,
   SelectedFilters,
-} from "../../mockData";
-import { convertedMockData } from "../AdminPage";
+  convertedMockData,
+} from "../AdminPage";
 
 const selectClassNames = {
   control: () => "AISPP_selectBlock__input",
@@ -38,7 +38,7 @@ const selectClassNames = {
 };
 
 type RightMenuProps = {
-  selectableFilters: SelectedFilters;
+  selectableFilters: SelectableFilters;
   changeSelectableFilters: (
     objKey: "managament" | "employee" | "registration" | "email",
     arg:
@@ -133,8 +133,8 @@ export const RightMenu: FC<RightMenuProps> = ({
                   instanceId="registration"
                   placeholder="Выберите статус регистрации"
                   options={[
-                    { value: true, label: "Зарегистрирован" },
-                    { value: false, label: "Не зарегистрирован" },
+                    { value: "true", label: "Зарегистрирован" },
+                    { value: "false", label: "Не зарегистрирован" },
                   ]}
                   value={selectableFilters.registration || []}
                   noOptionsMessage={() => "Ничего не выбрано"}
@@ -155,8 +155,8 @@ export const RightMenu: FC<RightMenuProps> = ({
                   instanceId="email"
                   placeholder="Выберите статус наличие email"
                   options={[
-                    { value: true, label: "Есть" },
-                    { value: false, label: "Нет" },
+                    { value: "true", label: "Есть" },
+                    { value: "false", label: "Нет" },
                   ]}
                   value={selectableFilters.email || []}
                   noOptionsMessage={() => "Ничего не выбрано"}

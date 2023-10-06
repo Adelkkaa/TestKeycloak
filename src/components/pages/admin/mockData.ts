@@ -30,17 +30,6 @@ export type ConvertedMockData = {
   EmployeeList: Employee[];
 };
 
-export type SelectOption = {
-  label: string;
-  value: boolean;
-};
-export type SelectedFilters = {
-  managament?: Managament[] | null;
-  employee?: Employee[] | null;
-  registration?: SelectOption | null;
-  email?: SelectOption | null;
-};
-
 export const mockData: MockData[] = [
   {
     id: 1,
