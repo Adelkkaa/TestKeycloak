@@ -3,7 +3,9 @@ import React, { FC, PropsWithChildren, TdHTMLAttributes } from "react";
 
 import classes from "./TableComponent.module.css";
 import { Checkbox } from "@/shared/ui/Checkbox";
-import { SelectedFilters, convertedMockData } from "../AdminPage";
+import { SelectedFilters } from "../AdminPage";
+import { TConvertedMockData } from "../../mockData";
+import Loader from "@/shared/ui/Loader";
 
 type AdminCellProps = TdHTMLAttributes<HTMLTableCellElement>;
 const AdminCell = (props: PropsWithChildren<AdminCellProps>) => {
@@ -17,10 +19,16 @@ const AdminCell = (props: PropsWithChildren<AdminCellProps>) => {
 
 type TableProps = {
   selectedFilters: SelectedFilters;
+  convertedMockData?: TConvertedMockData;
+  isLoading: boolean;
 };
 
-export const Table: FC<TableProps> = ({ selectedFilters }) => {
-  const filterTableData = convertedMockData.List.filter((v) =>
+export const Table: FC<TableProps> = ({
+  selectedFilters,
+  convertedMockData,
+  isLoading,
+}) => {
+  const filterTableData = convertedMockData?.List.filter((v) =>
     Object.keys(selectedFilters).length
       ? (selectedFilters.employee && selectedFilters.employee.length > 0
           ? selectedFilters?.employee?.some(
@@ -38,7 +46,8 @@ export const Table: FC<TableProps> = ({ selectedFilters }) => {
           : true) &&
         (selectedFilters.email && Object.keys(selectedFilters.email).length
           ? (selectedFilters.email == "true" && !!v.email) ||
-            (selectedFilters.email == "false" && !!!v.email)
+            (selectedFilters.email == "false" && !!!v.email) ||
+            selectedFilters.email === "all"
           : true)
       : true
   );
@@ -58,10 +67,18 @@ export const Table: FC<TableProps> = ({ selectedFilters }) => {
       <tbody
         className={clsx("AISPP_UI_table_tbody", classes.adminTableBlock_body)}
       >
-        {!filterTableData.length ? (
-          <tr className="AISPP_UI_emptyTable_tr">
-            <AdminCell colSpan={10}>Ничего не найдено...</AdminCell>
-          </tr>
+        {!filterTableData?.length ? (
+          isLoading ? (
+            <tr className="AISPP_UI_emptyTable_tr">
+              <AdminCell colSpan={10}>
+                <Loader />
+              </AdminCell>
+            </tr>
+          ) : (
+            <tr className="AISPP_UI_emptyTable_tr">
+              <AdminCell colSpan={10}>Ничего не найдено...</AdminCell>
+            </tr>
+          )
         ) : (
           filterTableData.map((row) => (
             <tr className="AISPP_UI_table_tr" key={row.id}>
