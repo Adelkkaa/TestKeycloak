@@ -40,7 +40,7 @@ const selectClassNames = {
 type RightMenuProps = {
   selectableFilters: SelectableFilters;
   changeSelectableFilters: (
-    objKey: "managament" | "employee" | "registration" | "email",
+    objKey: keyof SelectableFilters,
     arg:
       | MultiValue<Managament>
       | MultiValue<Employee>

@@ -21,10 +21,10 @@ export type SelectableFilters = {
 };
 
 export type SelectedFilters = {
-  managament?: number[] | undefined;
-  employee?: number[] | undefined;
-  registration?: string | undefined;
-  email?: string | undefined;
+  managament?: number[];
+  employee?: number[];
+  registration?: string;
+  email?: string;
 };
 
 const preferConvertMockData: () => ConvertedMockData = () => {
@@ -43,6 +43,7 @@ export const convertedMockData = preferConvertMockData();
 
 export const AdminPage = () => {
   const router = useRouter();
+  console.log(router.query);
 
   const [selectableFilters, setSelectableFilters] = useState<SelectableFilters>(
     {}
@@ -103,9 +104,13 @@ export const AdminPage = () => {
   };
 
   const onChangeRouterQuery = (queryParams: SelectedFilters) => {
+    const params = objectEmptyFilter(queryParams, (value) => !!value);
     router.push(
       {
-        query: objectEmptyFilter(queryParams, (value) => !!value),
+        query: {
+          ...router.query,
+          ...params,
+        },
       },
       undefined,
       { shallow: true }
@@ -114,13 +119,12 @@ export const AdminPage = () => {
 
   const applyFilterFunction = () => {
     const formData = {
-      managament:
-        selectableFilters.managament?.map((item) => item.managamentId) ||
-        undefined,
-      employee:
-        selectableFilters.employee?.map((item) => item.employeeId) || undefined,
-      registration: selectableFilters.registration?.value || undefined,
-      email: selectableFilters.email?.value || undefined,
+      managament: selectableFilters.managament?.map(
+        (item) => item.managamentId
+      ),
+      employee: selectableFilters.employee?.map((item) => item.employeeId),
+      registration: selectableFilters.registration?.value,
+      email: selectableFilters.email?.value,
     };
     setSelectedFilters(formData);
     onChangeRouterQuery(formData);
