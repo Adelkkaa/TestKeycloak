@@ -43,12 +43,67 @@ export const convertedMockData = preferConvertMockData();
 
 export const AdminPage = () => {
   const router = useRouter();
-  console.log(router.query);
+  // const formData = {
+  //   managament:
+  //     typeof router.query.managament !== undefined
+  //       ? convertedMockData.ManagamentList.filter(
+  //           (item) =>
+  //             Array.isArray(router.query.managament) &&
+  //             router.query.managament.some(
+  //               (v) => v === String(item.managamentId)
+  //             )
+  //         )
+  //       : undefined,
+  //   employee:
+  //     typeof router.query.employee !== undefined
+  //       ? convertedMockData.EmployeeList.filter(
+  //           (item) =>
+  //             Array.isArray(router.query.employee) &&
+  //             router.query.employee.some((v) => v === String(item.employeeId))
+  //         )
+  //       : undefined,
+  //   registration:
+  //     typeof router.query.registration !== undefined
+  //       ? router.query.registration == "true"
+  //         ? { label: "Зарегистрирован", value: "true" }
+  //         : { label: "Не зарегистрирован", value: "false" }
+  //       : undefined,
+  //   email:
+  //     typeof router.query.email !== undefined
+  //       ? router.query.email == "true"
+  //         ? { label: "Есть", value: "true" }
+  //         : { label: "Нет", value: "false" }
+  //       : undefined,
+  // };
 
+  const formDataSelected = {
+    managament:
+      Array.isArray(router.query.managament) &&
+      router.query.managament.length > 0
+        ? Array.isArray(router.query.managament)
+          ? router.query.managament.map((item) => Number(item))
+          : [Number(router.query.managament)]
+        : undefined,
+    employee:
+      Array.isArray(router.query.employee) && router.query.employee.length > 0
+        ? Array.isArray(router.query.employee)
+          ? router.query.employee.map((item) => Number(item))
+          : [Number(router.query.employee)]
+        : undefined,
+    registration:
+      typeof router.query.registration === "string"
+        ? router.query.registration
+        : undefined,
+    email:
+      typeof router.query.email === "string" ? router.query.email : undefined,
+  };
+
+  console.log(formDataSelected);
   const [selectableFilters, setSelectableFilters] = useState<SelectableFilters>(
     {}
   );
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
+  const [selectedFilters, setSelectedFilters] =
+    useState<SelectedFilters>(formDataSelected);
 
   // useEffect(() => {
   //   const queryParams = router.query;
