@@ -3,8 +3,7 @@ import React, { FC, PropsWithChildren, TdHTMLAttributes } from "react";
 
 import classes from "./TableComponent.module.css";
 import { Checkbox } from "@/shared/ui/Checkbox";
-import { SelectedFilters } from "../../mockData";
-import { convertedMockData } from "../AdminPage";
+import { SelectedFilters, convertedMockData } from "../AdminPage";
 
 type AdminCellProps = TdHTMLAttributes<HTMLTableCellElement>;
 const AdminCell = (props: PropsWithChildren<AdminCellProps>) => {
@@ -25,20 +24,21 @@ export const Table: FC<TableProps> = ({ selectedFilters }) => {
     Object.keys(selectedFilters).length
       ? (selectedFilters.employee && selectedFilters.employee.length > 0
           ? selectedFilters?.employee?.some(
-              (item) => item.employeeId === v.employee.employeeId
+              (item) => item === v.employee.employeeId
             )
           : true) &&
         (selectedFilters.managament && selectedFilters.managament.length
           ? selectedFilters.managament.some(
-              (item) => item.managamentId === v.managament.managamentId
+              (item) => item === v.managament.managamentId
             )
           : true) &&
         (selectedFilters.registration &&
         Object.keys(selectedFilters.registration).length
-          ? selectedFilters.registration.value === !!v.isRegistr
+          ? selectedFilters.registration === String(v.isRegistr)
           : true) &&
         (selectedFilters.email && Object.keys(selectedFilters.email).length
-          ? selectedFilters.email.value === !!v.email
+          ? (selectedFilters.email == "true" && !!v.email) ||
+            (selectedFilters.email == "false" && !!!v.email)
           : true)
       : true
   );
