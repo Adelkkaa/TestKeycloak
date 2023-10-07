@@ -1,4 +1,4 @@
-export type MockData = {
+export type TMockData = {
   id: number;
   employee: {
     employeeId: number;
@@ -16,21 +16,21 @@ export type MockData = {
   isRegistr: boolean;
 };
 
-export type Managament = { managamentId: number; managamentName: string };
-export type Employee = {
+export type TManagament = { managamentId: number; managamentName: string };
+export type TEmployee = {
   employeeId: number;
   employeeName: string;
   employeeSurname: string;
   employeePatronymic: string;
 };
 
-export type ConvertedMockData = {
-  List: MockData[];
-  ManagamentList: Managament[];
-  EmployeeList: Employee[];
+export type TConvertedMockData = {
+  List: TMockData[];
+  ManagamentList: TManagament[];
+  EmployeeList: TEmployee[];
 };
 
-export const mockData: MockData[] = [
+export const mockData: TMockData[] = [
   {
     id: 1,
     employee: {

@@ -7,13 +7,8 @@ import { ApplyIcon } from "../../icons/ApplyIcon";
 import classes from "./RightMenu.module.css";
 import clsx from "clsx";
 import Select, { MultiValue, SingleValue } from "react-select";
-import { Employee, Managament } from "../../mockData";
-import {
-  SelectOption,
-  SelectableFilters,
-  SelectedFilters,
-  convertedMockData,
-} from "../AdminPage";
+import { TConvertedMockData, TEmployee, TManagament } from "../../mockData";
+import { SelectOption, SelectableFilters } from "../AdminPage";
 
 const selectClassNames = {
   control: () => "AISPP_selectBlock__input",
@@ -42,18 +37,21 @@ type RightMenuProps = {
   changeSelectableFilters: (
     objKey: keyof SelectableFilters,
     arg:
-      | MultiValue<Managament>
-      | MultiValue<Employee>
+      | MultiValue<TManagament>
+      | MultiValue<TEmployee>
       | SingleValue<SelectOption>
+      | string
   ) => void;
   onApplyFilterFunction: () => void;
   onClearFilterFunction: () => void;
+  convertedMockData: TConvertedMockData | undefined;
 };
 export const RightMenu: FC<RightMenuProps> = ({
   selectableFilters,
   changeSelectableFilters,
   onApplyFilterFunction,
   onClearFilterFunction,
+  convertedMockData,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -81,9 +79,11 @@ export const RightMenu: FC<RightMenuProps> = ({
                   instanceId="managamentId"
                   isMulti
                   placeholder="Выберите управление"
-                  options={convertedMockData.ManagamentList}
-                  getOptionLabel={(option: Managament) => option.managamentName}
-                  getOptionValue={(option: Managament) =>
+                  options={convertedMockData?.ManagamentList}
+                  getOptionLabel={(option: TManagament) =>
+                    option.managamentName
+                  }
+                  getOptionValue={(option: TManagament) =>
                     String(option.managamentId)
                   }
                   value={selectableFilters.managament || []}
@@ -106,11 +106,11 @@ export const RightMenu: FC<RightMenuProps> = ({
                   instanceId="employee"
                   isMulti
                   placeholder="Выберите фамилию сотрудника"
-                  options={convertedMockData.EmployeeList}
-                  getOptionLabel={(option: Employee) =>
+                  options={convertedMockData?.EmployeeList}
+                  getOptionLabel={(option: TEmployee) =>
                     `${option.employeeSurname} ${option.employeeName} ${option.employeePatronymic}`
                   }
-                  getOptionValue={(option: Employee) =>
+                  getOptionValue={(option: TEmployee) =>
                     String(option.employeeId)
                   }
                   value={selectableFilters.employee || []}
@@ -124,7 +124,7 @@ export const RightMenu: FC<RightMenuProps> = ({
               </div>
             </div>
 
-            <div className={classes.filters__item}>
+            {/* <div className={classes.filters__item}>
               <p className={classes.filters__title}>Регистрация</p>
               <div>
                 <Select
@@ -144,27 +144,46 @@ export const RightMenu: FC<RightMenuProps> = ({
                   classNames={selectClassNames}
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Email</p>
               <div>
-                <Select
-                  name="email"
-                  id="email"
-                  instanceId="email"
-                  placeholder="Выберите статус наличие email"
-                  options={[
-                    { value: "true", label: "Есть" },
-                    { value: "false", label: "Нет" },
-                  ]}
-                  value={selectableFilters.email || []}
-                  noOptionsMessage={() => "Ничего не выбрано"}
-                  onChange={(value) => {
-                    changeSelectableFilters("email", value);
-                  }}
-                  classNames={selectClassNames}
+                <input
+                  type="radio"
+                  name="radio"
+                  value={"true"}
+                  checked={selectableFilters.email == "true" ? true : false}
+                  onChange={(e) =>
+                    changeSelectableFilters("email", e.target.value)
+                  }
                 />
+                Да
+                <input
+                  type="radio"
+                  name="radio"
+                  value="false"
+                  checked={selectableFilters.email == "false" ? true : false}
+                  onChange={(e) =>
+                    changeSelectableFilters("email", e.target.value)
+                  }
+                />
+                Нет
+                <input
+                  type="radio"
+                  name="radio"
+                  value={"all"}
+                  checked={
+                    selectableFilters.email == "all" ||
+                    selectableFilters.email === undefined
+                      ? true
+                      : false
+                  }
+                  onChange={(e) =>
+                    changeSelectableFilters("email", e.target.value)
+                  }
+                />
+                Все
               </div>
             </div>
           </div>
