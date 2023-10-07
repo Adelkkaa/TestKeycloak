@@ -1,34 +1,29 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { RightMenu } from "./RightMenu";
+import { RightMenu } from './RightMenu';
 
-import classes from "./AdminPage.module.css";
-import { Table } from "./TableComponent";
-import {
-  TConvertedMockData,
-  TEmployee,
-  TManagament,
-  TMockData,
-  mockData,
-} from "../mockData";
-import { MultiValue, SingleValue } from "react-select";
-import { useRouter } from "next/router";
-import { objectEmptyFilter } from "@/utils/objectFilter";
-import { resolve } from "path";
-import { preferMockData } from "./preferMockData";
+import classes from './AdminPage.module.css';
+import { Table } from './TableComponent';
+import { TPreferMockData, TEmployee, TManagament, TMockData, mockData } from '../mockData';
+import { MultiValue, SingleValue } from 'react-select';
+import { useRouter } from 'next/router';
+import { objectEmptyFilter } from '@/utils/objectFilter';
+import { resolve } from 'path';
+import { preferMockData } from './preferMockData';
+import Loader from '@/shared/ui/Loader';
 
 export type SelectOption = {
   label: string;
   value: string;
 };
-export type SelectableFilters = {
+export type TSelectableFilters = {
   managament?: MultiValue<TManagament>;
   employee?: MultiValue<TEmployee>;
-  registration?: SingleValue<SelectOption>;
+  registration?: string;
   email?: string;
 };
 
-export type SelectedFilters = {
+export type TSelectedFilters = {
   managament?: number[];
   employee?: number[];
   registration?: string;
@@ -38,64 +33,83 @@ export type SelectedFilters = {
 export const AdminPage = () => {
   const router = useRouter();
 
-  console.log(router.query);
-  const [convertedMockData, setConvertedMockData] =
-    useState<TConvertedMockData>();
-  const [selectableFilters, setSelectableFilters] = useState<SelectableFilters>(
-    {}
-  );
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [convertedMockData, setConvertedMockData] = useState<TPreferMockData>();
+  const [selectableFilters, setSelectableFilters] = useState<TSelectableFilters>({});
+  const [selectedFilters, setSelectedFilters] = useState<TSelectedFilters>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const formDataSelected = {
-      managament:
-        Array.isArray(router.query.managament) &&
-        router.query.managament.length > 0
-          ? Array.isArray(router.query.managament)
-            ? router.query.managament.map((item) => Number(item))
-            : [Number(router.query.managament)]
-          : undefined,
-      employee:
-        Array.isArray(router.query.employee) && router.query.employee.length > 0
-          ? Array.isArray(router.query.employee)
-            ? router.query.employee.map((item) => Number(item))
-            : [Number(router.query.employee)]
-          : undefined,
-      registration:
-        typeof router.query.registration === "string"
-          ? router.query.registration
-          : undefined,
-      email:
-        typeof router.query.email === "string" ? router.query.email : undefined,
-    };
-    setSelectedFilters(formDataSelected);
-    setSelectableFilters({ email: formDataSelected.email });
-  }, [router.query]);
+    if (router.isReady) {
+      const { managament, employee, registration, email } = router.query;
+
+      const formDataSelected = {
+        managament:
+          Array.isArray(managament) && managament.length > 0
+            ? managament.map((item) => Number(item))
+            : typeof managament === 'string'
+            ? [Number(managament)]
+            : undefined,
+        employee:
+          Array.isArray(employee) && employee.length > 0
+            ? employee.map((item) => Number(item))
+            : typeof employee === 'string'
+            ? [Number(employee)]
+            : undefined,
+        registration: typeof registration === 'string' ? registration : undefined,
+        email: typeof email === 'string' ? email : undefined,
+      };
+      setSelectedFilters(formDataSelected);
+
+      setSelectableFilters((prev) => ({
+        ...prev,
+        email: formDataSelected.email,
+        registration: formDataSelected.registration,
+      }));
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
-    new Promise((res, rej) => {
-      setIsLoading(true);
-      setTimeout(() => res(mockData), 5000);
-    }).then((mock) => {
-      const data = preferMockData(mock as TMockData[]);
-      setConvertedMockData(data);
-      setIsLoading(false);
-    });
-  }, []);
+    if (router.isReady) {
+      new Promise((res, rej) => {
+        setIsLoading(true);
+        setTimeout(() => res(mockData), 1000);
+      }).then((mock) => {
+        const data = preferMockData(mock as TMockData[]);
+        setConvertedMockData(data);
+
+        const { managament, employee } = router.query;
+        setSelectableFilters((prev) => ({
+          ...prev,
+          managament:
+            typeof managament !== undefined
+              ? data.ManagamentList.filter((item) =>
+                  Array.isArray(managament)
+                    ? managament.some((v) => v === String(item.managamentId))
+                    : item.managamentId === Number(managament),
+                )
+              : undefined,
+          employee:
+            typeof employee !== undefined
+              ? data.EmployeeList.filter((item) =>
+                  Array.isArray(employee)
+                    ? employee.some((v) => v === String(item.employeeId))
+                    : item.employeeId === Number(employee),
+                )
+              : undefined,
+        }));
+        setIsLoading(false);
+      });
+    }
+  }, [router.isReady, router.query]);
 
   const changeSelectableFilters = (
-    objKey: keyof SelectableFilters,
-    arg:
-      | SingleValue<SelectOption>
-      | MultiValue<TManagament>
-      | MultiValue<TEmployee>
-      | string
+    objKey: keyof TSelectableFilters,
+    arg: SingleValue<SelectOption> | MultiValue<TManagament> | MultiValue<TEmployee> | string,
   ) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
   };
 
-  const onChangeRouterQuery = (queryParams: SelectedFilters) => {
+  const onChangeRouterQuery = (queryParams: TSelectedFilters) => {
     const params = objectEmptyFilter(queryParams, (value) => !!value);
     router.push(
       {
@@ -105,17 +119,15 @@ export const AdminPage = () => {
         },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
   };
 
   const applyFilterFunction = () => {
     const formData = {
-      managament: selectableFilters.managament?.map(
-        (item) => item.managamentId
-      ),
+      managament: selectableFilters.managament?.map((item) => item.managamentId),
       employee: selectableFilters.employee?.map((item) => item.employeeId),
-      registration: selectableFilters.registration?.value,
+      registration: selectableFilters.registration,
       email: selectableFilters.email,
     };
     // setSelectedFilters(formData);
@@ -129,20 +141,22 @@ export const AdminPage = () => {
   };
   return (
     <div className={classes.adminPage}>
-      <div className={classes.adminPageTable}>
-        <Table
-          isLoading={isLoading}
-          selectedFilters={selectedFilters}
-          convertedMockData={convertedMockData}
-        />
-      </div>
-      <RightMenu
-        selectableFilters={selectableFilters}
-        changeSelectableFilters={changeSelectableFilters}
-        onApplyFilterFunction={applyFilterFunction}
-        onClearFilterFunction={clearFilterFunction}
-        convertedMockData={convertedMockData}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className={classes.adminPageTable}>
+            <Table selectedFilters={selectedFilters} preferMockData={convertedMockData} />
+          </div>
+          <RightMenu
+            selectableFilters={selectableFilters}
+            changeSelectableFilters={changeSelectableFilters}
+            onApplyFilterFunction={applyFilterFunction}
+            onClearFilterFunction={clearFilterFunction}
+            preferMockData={convertedMockData}
+          />
+        </>
+      )}
     </div>
   );
 };

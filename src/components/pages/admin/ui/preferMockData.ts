@@ -1,11 +1,6 @@
-import {
-  TConvertedMockData,
-  TEmployee,
-  TManagament,
-  TMockData,
-} from "../mockData";
+import { TPreferMockData, TEmployee, TManagament, TMockData } from '../mockData';
 
-type PreferMockData = (array: TMockData[]) => TConvertedMockData;
+type PreferMockData = (array: TMockData[]) => TPreferMockData;
 
 export const preferMockData: PreferMockData = (array) => {
   const managamentList: TManagament[] = [];
@@ -14,7 +9,7 @@ export const preferMockData: PreferMockData = (array) => {
   for (const value of array) {
     employeeList.push(value.employee);
     const isExistManagement = managamentList.some(
-      (managament) => managament.managamentId === value.managament.managamentId
+      (managament) => managament.managamentId === value.managament.managamentId,
     );
     if (!isExistManagement) {
       managamentList.push(value.managament);
