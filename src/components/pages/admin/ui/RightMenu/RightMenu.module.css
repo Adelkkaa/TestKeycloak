@@ -26,6 +26,7 @@
   position: relative;
   max-width: 30%;
   width: 60px;
+  /* Поменял высоту */
   height: 90vh;
   display: flex;
   flex-direction: column;
