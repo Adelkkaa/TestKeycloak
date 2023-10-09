@@ -85,7 +85,7 @@ export const AdminPage = () => {
   }, [router.isReady]);
 
   useEffect(() => {
-    if (convertedMockData) {
+    if (convertedMockData && router.isReady) {
       setSelectableFilters((prev) => {
         const { managament, employee } = prev;
         return {
@@ -105,7 +105,7 @@ export const AdminPage = () => {
         };
       });
     }
-  }, [convertedMockData]);
+  }, [convertedMockData, router.isReady]);
 
   const changeSelectableFilters: TChangeSelectableFilters = (objKey, arg) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
