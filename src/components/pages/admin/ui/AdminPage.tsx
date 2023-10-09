@@ -4,18 +4,13 @@ import { RightMenu } from "./RightMenu";
 
 import classes from "./AdminPage.module.css";
 import { Table } from "./TableComponent";
-import {
-  TPreferMockData,
-  TEmployee,
-  TManagament,
-  TMockData,
-  mockData,
-} from "../mockData";
+import { TPreferMockData, TEmployee, TManagament } from "../mockData";
 import { MultiValue } from "react-select";
 import { useRouter } from "next/router";
 import { objectEmptyFilter } from "@/utils/objectFilter";
 import { preferMockData } from "./preferMockData";
 import Loader from "@/shared/ui/Loader";
+import { useGetAdminTableAllInfoQuery } from "@/redux/features/admin/adminApiSlice";
 
 export type TSelectableFilters = {
   managament?: MultiValue<TManagament>;
@@ -43,7 +38,11 @@ export const AdminPage = () => {
   const [selectableFilters, setSelectableFilters] =
     useState<TSelectableFilters>({});
   const [selectedFilters, setSelectedFilters] = useState<TSelectedFilters>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    data: tableData,
+    isLoading,
+    isFetching,
+  } = useGetAdminTableAllInfoQuery();
 
   useEffect(() => {
     if (router.isReady) {
@@ -77,35 +76,29 @@ export const AdminPage = () => {
   }, [router.isReady, router.query]);
 
   useEffect(() => {
-    if (router.isReady) {
-      new Promise((res, rej) => {
-        setIsLoading(true);
-        setTimeout(() => res(mockData), 1000);
-      }).then((mock) => {
-        const data = preferMockData(mock as TMockData[]);
-        setConvertedMockData(data);
-        // Исправил
-        const { managament, employee } = selectedFilters;
+    if (router.isReady && tableData) {
+      const data = preferMockData(tableData);
+      setConvertedMockData(data);
+      // Исправил
+      const { managament, employee } = selectedFilters;
 
-        setSelectableFilters((prev) => ({
-          ...prev,
-          managament:
-            managament !== undefined
-              ? data.ManagamentList.filter((item) =>
-                  managament.some((v) => v === item.managamentId)
-                )
-              : undefined,
-          employee:
-            employee !== undefined
-              ? data.EmployeeList.filter((item) =>
-                  employee.some((v) => v === item.employeeId)
-                )
-              : undefined,
-        }));
-        setIsLoading(false);
-      });
+      setSelectableFilters((prev) => ({
+        ...prev,
+        managament:
+          managament !== undefined
+            ? data.ManagamentList.filter((item) =>
+                managament.some((v) => v === item.managamentId)
+              )
+            : undefined,
+        employee:
+          employee !== undefined
+            ? data.EmployeeList.filter((item) =>
+                employee.some((v) => v === item.employeeId)
+              )
+            : undefined,
+      }));
     }
-  }, [selectedFilters, router.isReady]);
+  }, [selectedFilters, router.isReady, tableData]);
 
   const changeSelectableFilters: TChangeSelectableFilters = (objKey, arg) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
@@ -145,7 +138,7 @@ export const AdminPage = () => {
   };
   return (
     <div className={classes.adminPage}>
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <Loader />
       ) : (
         <>
