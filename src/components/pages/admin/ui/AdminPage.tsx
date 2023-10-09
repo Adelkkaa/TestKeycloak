@@ -33,7 +33,7 @@ export type TSelectedFilters = {
 
 export type TChangeSelectableFilters = (
   objKey: keyof TSelectableFilters,
-  arg: MultiValue<TManagament> | MultiValue<TEmployee> | string
+  arg: TSelectableFilters[keyof TSelectableFilters]
 ) => void;
 
 export const AdminPage = () => {
