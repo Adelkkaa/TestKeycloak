@@ -29,3 +29,11 @@ export type TPreferMockData = {
   ManagamentList: TManagament[];
   EmployeeList: TEmployee[];
 };
+
+export type TRadioArray = {
+  name: string;
+  value: string;
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+};
