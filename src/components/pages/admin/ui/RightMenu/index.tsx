@@ -7,9 +7,15 @@ import { ApplyIcon } from "../../icons/ApplyIcon";
 import classes from "./RightMenu.module.css";
 import clsx from "clsx";
 import Select from "react-select";
-import { TPreferMockData, TEmployee, TManagament } from "../../mockData";
+import {
+  TPreferMockData,
+  TEmployee,
+  TManagament,
+  TRadioArray,
+} from "../../mockData";
 import { TChangeSelectableFilters, TSelectableFilters } from "../AdminPage";
-import { RadioInput } from "@/shared/ui/Radio";
+import { RadioElement } from "@/shared/ui/Radio";
+import { RadioArray } from "@/shared/ui/RadioArray";
 
 const selectClassNames = {
   control: () => "AISPP_selectBlock__input",
@@ -48,6 +54,62 @@ export const RightMenu: FC<RightMenuProps> = ({
   preferMockData,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
+
+  const registrationData: TRadioArray[] = [
+    {
+      name: "radioRegistr",
+      value: "true",
+      checked: selectableFilters.registration == "true" ? true : false,
+      onChange: (e) => changeSelectableFilters("registration", e.target.value),
+      label: "Да",
+    },
+    {
+      name: "radioRegistr",
+      value: "false",
+      checked: selectableFilters.registration == "false" ? true : false,
+      onChange: (e) => changeSelectableFilters("registration", e.target.value),
+      label: "Нет",
+    },
+    {
+      name: "radioRegistr",
+      value: "all",
+      checked:
+        selectableFilters.registration == "all" ||
+        selectableFilters.registration == undefined
+          ? true
+          : false,
+      onChange: (e) => changeSelectableFilters("registration", e.target.value),
+      label: "Все",
+    },
+  ];
+
+  const emailData: TRadioArray[] = [
+    {
+      name: "radio",
+      value: "true",
+      checked: selectableFilters.email == "true" ? true : false,
+      onChange: (e) => changeSelectableFilters("email", e.target.value),
+      label: "Да",
+    },
+    {
+      name: "radio",
+      value: "false",
+      checked: selectableFilters.email == "false" ? true : false,
+      onChange: (e) => changeSelectableFilters("email", e.target.value),
+      label: "Нет",
+    },
+    {
+      name: "radio",
+      value: "all",
+      checked:
+        selectableFilters.email == "all" ||
+        selectableFilters.email === undefined
+          ? true
+          : false,
+      onChange: (e) => changeSelectableFilters("email", e.target.value),
+      label: "Все",
+    },
+  ];
 
   return (
     <div
@@ -120,83 +182,12 @@ export const RightMenu: FC<RightMenuProps> = ({
 
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Регистрация</p>
-              <div className={classes.filters__radio}>
-                {/*  Исправил */}
-                <RadioInput
-                  name="radioRegistr"
-                  value="true"
-                  checked={
-                    selectableFilters.registration == "true" ? true : false
-                  }
-                  onChange={(e) =>
-                    changeSelectableFilters("registration", e.target.value)
-                  }
-                  label="Да"
-                />
-                <RadioInput
-                  name="radioRegistr"
-                  value="false"
-                  checked={
-                    selectableFilters.registration == "false" ? true : false
-                  }
-                  onChange={(e) =>
-                    changeSelectableFilters("registration", e.target.value)
-                  }
-                  label="Нет"
-                />
-                <RadioInput
-                  name="radioRegistr"
-                  value="all"
-                  checked={
-                    selectableFilters.registration == "all" ||
-                    selectableFilters.registration == undefined
-                      ? true
-                      : false
-                  }
-                  onChange={(e) =>
-                    changeSelectableFilters("registration", e.target.value)
-                  }
-                  label="Все"
-                />
-              </div>
+              <RadioArray array={registrationData} />
             </div>
 
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Email</p>
-              <div className={classes.filters__radio}>
-                <RadioInput
-                  name="radio"
-                  value="true"
-                  checked={selectableFilters.email == "true" ? true : false}
-                  onChange={(e) =>
-                    changeSelectableFilters("email", e.target.value)
-                  }
-                  label="Да"
-                />
-                <RadioInput
-                  name="radio"
-                  value="false"
-                  checked={selectableFilters.email == "false" ? true : false}
-                  onChange={(e) =>
-                    changeSelectableFilters("email", e.target.value)
-                  }
-                  label="Нет"
-                />
-                <RadioInput
-                  name="radio"
-                  value="all"
-                  checked={
-                    selectableFilters.email == "all" ||
-                    selectableFilters.email === undefined
-                      ? true
-                      : false
-                  }
-                  onChange={(e) =>
-                    changeSelectableFilters("email", e.target.value)
-                  }
-                  label="Все"
-                />
-              </div>
+              <RadioArray array={emailData} />
             </div>
           </div>
 

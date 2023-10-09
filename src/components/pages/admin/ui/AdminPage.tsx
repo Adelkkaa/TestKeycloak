@@ -4,11 +4,10 @@ import { RightMenu } from "./RightMenu";
 
 import classes from "./AdminPage.module.css";
 import { Table } from "./TableComponent";
-import { TPreferMockData, TEmployee, TManagament } from "../mockData";
+import { TEmployee, TManagament } from "../mockData";
 import { MultiValue } from "react-select";
 import { useRouter } from "next/router";
 import { objectEmptyFilter } from "@/utils/objectFilter";
-import { preferMockData } from "./preferMockData";
 import Loader from "@/shared/ui/Loader";
 import { useGetAdminTableAllInfoQuery } from "@/redux/features/admin/adminApiSlice";
 
@@ -34,14 +33,14 @@ export type TChangeSelectableFilters = (
 export const AdminPage = () => {
   const router = useRouter();
 
-  const [convertedMockData, setConvertedMockData] = useState<TPreferMockData>();
   const [selectableFilters, setSelectableFilters] =
     useState<TSelectableFilters>({});
   const [selectedFilters, setSelectedFilters] = useState<TSelectedFilters>({});
   const {
-    data: tableData,
+    data: convertedMockData,
     isLoading,
     isFetching,
+    isSuccess,
   } = useGetAdminTableAllInfoQuery();
 
   useEffect(() => {
@@ -76,29 +75,27 @@ export const AdminPage = () => {
   }, [router.isReady, router.query]);
 
   useEffect(() => {
-    if (router.isReady && tableData) {
-      const data = preferMockData(tableData);
-      setConvertedMockData(data);
-      // Исправил
-      const { managament, employee } = selectedFilters;
-
-      setSelectableFilters((prev) => ({
-        ...prev,
-        managament:
-          managament !== undefined
-            ? data.ManagamentList.filter((item) =>
-                managament.some((v) => v === item.managamentId)
-              )
-            : undefined,
-        employee:
-          employee !== undefined
-            ? data.EmployeeList.filter((item) =>
-                employee.some((v) => v === item.employeeId)
-              )
-            : undefined,
-      }));
+    if (router.isReady && convertedMockData) {
+      setSelectableFilters((prev) => {
+        const { managament, employee } = selectedFilters;
+        return {
+          ...prev,
+          managament:
+            managament !== undefined
+              ? convertedMockData.ManagamentList.filter((item) =>
+                  managament.some((v) => v === item.managamentId)
+                )
+              : undefined,
+          employee:
+            employee !== undefined
+              ? convertedMockData.EmployeeList.filter((item) =>
+                  employee.some((v) => v === item.employeeId)
+                )
+              : undefined,
+        };
+      });
     }
-  }, [selectedFilters, router.isReady, tableData]);
+  }, [selectedFilters, router.isReady, convertedMockData]);
 
   const changeSelectableFilters: TChangeSelectableFilters = (objKey, arg) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
@@ -141,21 +138,23 @@ export const AdminPage = () => {
       {isLoading || isFetching ? (
         <Loader />
       ) : (
-        <>
-          <div className={classes.adminPageTable}>
-            <Table
-              selectedFilters={selectedFilters}
+        isSuccess && (
+          <>
+            <div className={classes.adminPageTable}>
+              <Table
+                selectedFilters={selectedFilters}
+                preferMockData={convertedMockData}
+              />
+            </div>
+            <RightMenu
+              selectableFilters={selectableFilters}
+              changeSelectableFilters={changeSelectableFilters}
+              onApplyFilterFunction={applyFilterFunction}
+              onClearFilterFunction={clearFilterFunction}
               preferMockData={convertedMockData}
             />
-          </div>
-          <RightMenu
-            selectableFilters={selectableFilters}
-            changeSelectableFilters={changeSelectableFilters}
-            onApplyFilterFunction={applyFilterFunction}
-            onClearFilterFunction={clearFilterFunction}
-            preferMockData={convertedMockData}
-          />
-        </>
+          </>
+        )
       )}
     </div>
   );

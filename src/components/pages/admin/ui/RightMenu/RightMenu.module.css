@@ -87,9 +87,3 @@
   font-weight: 500;
   user-select: none;
 }
-
-.filters__radio {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
