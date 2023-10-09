@@ -5,6 +5,7 @@ type RadioInputProps = {
   label: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
+// Создал
 export const RadioInput: FC<RadioInputProps> = ({ label, ...otherProps }) => {
   return (
     <label className={classes.radioLabel}>
