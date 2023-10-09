@@ -24,9 +24,9 @@
 
 .rightMenu {
   position: relative;
-  max-width: 424px;
+  max-width: 30%;
   width: 60px;
-  height: 646px;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,16 +34,17 @@
   flex-shrink: 0;
   border-radius: 10px;
   background: #f0f2f7;
-  padding: 58px 41px 114px;
+  padding: 58px 41px 41px;
   transition: 0.5s ease-in-out;
   overflow-x: hidden;
 }
 
 .rightMenu-open {
-  width: 424px;
+  width: 30%;
 }
 
 .buttonWrapper {
+  margin-top: 16px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -84,4 +85,10 @@
   font-size: 14px;
   font-weight: 500;
   user-select: none;
+}
+
+.filters__radio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
