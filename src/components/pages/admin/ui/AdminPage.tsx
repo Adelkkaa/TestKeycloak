@@ -70,32 +70,42 @@ export const AdminPage = () => {
         ...prev,
         email: formDataSelected.email,
         registration: formDataSelected.registration,
+        employee: formDataSelected?.employee?.map((item) => ({
+          employeeId: item,
+          employeeName: "",
+          employeePatronymic: "",
+          employeeSurname: "",
+        })),
+        managament: formDataSelected?.managament?.map((item) => ({
+          managamentId: item,
+          managamentName: "",
+        })),
       }));
     }
-  }, [router.isReady, router.query]);
+  }, [router.isReady]);
 
   useEffect(() => {
-    if (router.isReady && convertedMockData) {
+    if (convertedMockData) {
       setSelectableFilters((prev) => {
-        const { managament, employee } = selectedFilters;
+        const { managament, employee } = prev;
         return {
           ...prev,
           managament:
             managament !== undefined
               ? convertedMockData.ManagamentList.filter((item) =>
-                  managament.some((v) => v === item.managamentId)
+                  managament.some((v) => v.managamentId === item.managamentId)
                 )
               : undefined,
           employee:
             employee !== undefined
               ? convertedMockData.EmployeeList.filter((item) =>
-                  employee.some((v) => v === item.employeeId)
+                  employee.some((v) => v.employeeId === item.employeeId)
                 )
               : undefined,
         };
       });
     }
-  }, [selectedFilters, router.isReady, convertedMockData]);
+  }, [convertedMockData]);
 
   const changeSelectableFilters: TChangeSelectableFilters = (objKey, arg) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
@@ -124,7 +134,7 @@ export const AdminPage = () => {
       registration: selectableFilters.registration,
       email: selectableFilters.email,
     };
-    // setSelectedFilters(formData);
+    setSelectedFilters(formData);
     onChangeRouterQuery(formData);
   };
 

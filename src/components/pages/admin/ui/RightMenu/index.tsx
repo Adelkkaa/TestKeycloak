@@ -14,7 +14,6 @@ import {
   TRadioArray,
 } from "../../mockData";
 import { TChangeSelectableFilters, TSelectableFilters } from "../AdminPage";
-import { RadioElement } from "@/shared/ui/Radio";
 import { RadioArray } from "@/shared/ui/RadioArray";
 
 const selectClassNames = {
