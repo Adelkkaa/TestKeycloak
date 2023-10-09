@@ -1,40 +1,44 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState } from "react";
 
-import { Button } from '@/shared/ui/Button';
-import { ResetIcon } from '../../icons/ResetIcon';
-import { ApplyIcon } from '../../icons/ApplyIcon';
+import { Button } from "@/shared/ui/Button";
+import { ResetIcon } from "../../icons/ResetIcon";
+import { ApplyIcon } from "../../icons/ApplyIcon";
 
-import classes from './RightMenu.module.css';
-import clsx from 'clsx';
-import Select, { MultiValue, SingleValue } from 'react-select';
-import { TPreferMockData, TEmployee, TManagament } from '../../mockData';
-import { SelectOption, TSelectableFilters } from '../AdminPage';
+import classes from "./RightMenu.module.css";
+import clsx from "clsx";
+import Select from "react-select";
+import { TPreferMockData, TEmployee, TManagament } from "../../mockData";
+import { TChangeSelectableFilters, TSelectableFilters } from "../AdminPage";
+import { RadioInput } from "@/shared/ui/Radio";
 
 const selectClassNames = {
-  control: () => 'AISPP_selectBlock__input',
-  menu: () => 'AISPP_selectBlock__options',
-  menuList: () => 'AISPP_selectBlock__optionsList',
-  singleValue: () => 'AISPP_selectBlock__singleValue',
-  valueContainer: () => 'AISPP_selectBlock__valueContainer',
-  placeholder: () => 'AISPP_selectBlock__placeholder',
-  input: () => 'AISPP_selectBlock__input_field',
-  option: ({ isSelected, isFocused }: { isSelected: boolean; isFocused: boolean }) =>
+  control: () => "AISPP_selectBlock__input",
+  menu: () => "AISPP_selectBlock__options",
+  menuList: () => "AISPP_selectBlock__optionsList",
+  singleValue: () => "AISPP_selectBlock__singleValue",
+  valueContainer: () => "AISPP_selectBlock__valueContainer",
+  placeholder: () => "AISPP_selectBlock__placeholder",
+  input: () => "AISPP_selectBlock__input_field",
+  option: ({
+    isSelected,
+    isFocused,
+  }: {
+    isSelected: boolean;
+    isFocused: boolean;
+  }) =>
     clsx(
-      'AISPP_selectBlock__optionsItem',
-      isSelected && 'AISPP_selectBlock__optionsItemActive',
-      isFocused && 'AISPP_selectBlock__optionsItemFocus',
+      "AISPP_selectBlock__optionsItem",
+      isSelected && "AISPP_selectBlock__optionsItemActive",
+      isFocused && "AISPP_selectBlock__optionsItemFocus"
     ),
 };
 
 type RightMenuProps = {
   selectableFilters: TSelectableFilters;
-  changeSelectableFilters: (
-    objKey: keyof TSelectableFilters,
-    arg: MultiValue<TManagament> | MultiValue<TEmployee> | SingleValue<SelectOption> | string,
-  ) => void;
+  preferMockData: TPreferMockData | undefined;
+  changeSelectableFilters: TChangeSelectableFilters;
   onApplyFilterFunction: () => void;
   onClearFilterFunction: () => void;
-  preferMockData: TPreferMockData | undefined;
 };
 export const RightMenu: FC<RightMenuProps> = ({
   selectableFilters,
@@ -48,12 +52,12 @@ export const RightMenu: FC<RightMenuProps> = ({
   return (
     <div
       className={clsx(classes.rightMenu, {
-        [classes['rightMenu-open']]: isOpen,
+        [classes["rightMenu-open"]]: isOpen,
       })}
     >
       <div
         className={clsx(classes.caret, {
-          [classes['caret-open']]: isOpen,
+          [classes["caret-open"]]: isOpen,
         })}
         onClick={() => setIsOpen((prev) => !prev)}
       ></div>
@@ -70,12 +74,16 @@ export const RightMenu: FC<RightMenuProps> = ({
                   isMulti
                   placeholder="Выберите управление"
                   options={preferMockData?.ManagamentList}
-                  getOptionLabel={(option: TManagament) => option.managamentName}
-                  getOptionValue={(option: TManagament) => String(option.managamentId)}
+                  getOptionLabel={(option: TManagament) =>
+                    option.managamentName
+                  }
+                  getOptionValue={(option: TManagament) =>
+                    String(option.managamentId)
+                  }
                   value={selectableFilters.managament || []}
-                  noOptionsMessage={() => 'Ничего не выбрано'}
+                  noOptionsMessage={() => "Ничего не выбрано"}
                   onChange={(value) => {
-                    changeSelectableFilters('managament', value);
+                    changeSelectableFilters("managament", value);
                   }}
                   classNames={selectClassNames}
                   closeMenuOnSelect={false}
@@ -96,11 +104,13 @@ export const RightMenu: FC<RightMenuProps> = ({
                   getOptionLabel={(option: TEmployee) =>
                     `${option.employeeSurname} ${option.employeeName} ${option.employeePatronymic}`
                   }
-                  getOptionValue={(option: TEmployee) => String(option.employeeId)}
+                  getOptionValue={(option: TEmployee) =>
+                    String(option.employeeId)
+                  }
                   value={selectableFilters.employee || []}
-                  noOptionsMessage={() => 'Ничего не выбрано'}
+                  noOptionsMessage={() => "Ничего не выбрано"}
                   onChange={(value) => {
-                    changeSelectableFilters('employee', value);
+                    changeSelectableFilters("employee", value);
                   }}
                   classNames={selectClassNames}
                   closeMenuOnSelect={false}
@@ -108,106 +118,83 @@ export const RightMenu: FC<RightMenuProps> = ({
               </div>
             </div>
 
-            {/* <div className={classes.filters__item}>
-              <p className={classes.filters__title}>Регистрация</p>
-              <div>
-                <Select
-                  name="registration"
-                  id="registration"
-                  instanceId="registration"
-                  placeholder="Выберите статус регистрации"
-                  options={[
-                    { value: "true", label: "Зарегистрирован" },
-                    { value: "false", label: "Не зарегистрирован" },
-                  ]}
-                  value={selectableFilters.registration || []}
-                  noOptionsMessage={() => "Ничего не выбрано"}
-                  onChange={(value) => {
-                    changeSelectableFilters("registration", value);
-                  }}
-                  classNames={selectClassNames}
-                />
-              </div>
-            </div> */}
-
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Регистрация</p>
               <div className={classes.filters__radio}>
-                <label>
-                  <input
-                    type="radio"
-                    name="radioRegistr"
-                    value={'true'}
-                    checked={selectableFilters.registration == 'true' ? true : false}
-                    onChange={(e) => changeSelectableFilters('registration', e.target.value)}
-                  />
-                  <span>Да</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="radioRegistr"
-                    value="false"
-                    checked={selectableFilters.registration == 'false' ? true : false}
-                    onChange={(e) => changeSelectableFilters('registration', e.target.value)}
-                  />
-                  <span>Нет</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="radioRegistr"
-                    value={'all'}
-                    checked={
-                      selectableFilters.registration == 'all' ||
-                      selectableFilters.registration == undefined
-                        ? true
-                        : false
-                    }
-                    onChange={(e) => changeSelectableFilters('registration', e.target.value)}
-                  />
-                  <span>Все</span>
-                </label>
+                <RadioInput
+                  name="radioRegistr"
+                  value="true"
+                  checked={
+                    selectableFilters.registration == "true" ? true : false
+                  }
+                  onChange={(e) =>
+                    changeSelectableFilters("registration", e.target.value)
+                  }
+                  label="Да"
+                />
+                <RadioInput
+                  name="radioRegistr"
+                  value="false"
+                  checked={
+                    selectableFilters.registration == "false" ? true : false
+                  }
+                  onChange={(e) =>
+                    changeSelectableFilters("registration", e.target.value)
+                  }
+                  label="Нет"
+                />
+                <RadioInput
+                  name="radioRegistr"
+                  value="all"
+                  checked={
+                    selectableFilters.registration == "all" ||
+                    selectableFilters.registration == undefined
+                      ? true
+                      : false
+                  }
+                  onChange={(e) =>
+                    changeSelectableFilters("registration", e.target.value)
+                  }
+                  label="Все"
+                />
               </div>
             </div>
 
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Email</p>
               <div className={classes.filters__radio}>
-                <label>
-                  <input
-                    type="radio"
-                    name="radio"
-                    value={'true'}
-                    checked={selectableFilters.email == 'true' ? true : false}
-                    onChange={(e) => changeSelectableFilters('email', e.target.value)}
-                  />
-                  <span>Да</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="radio"
-                    value="false"
-                    checked={selectableFilters.email == 'false' ? true : false}
-                    onChange={(e) => changeSelectableFilters('email', e.target.value)}
-                  />
-                  <span>Нет</span>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="radio"
-                    value={'all'}
-                    checked={
-                      selectableFilters.email == 'all' || selectableFilters.email === undefined
-                        ? true
-                        : false
-                    }
-                    onChange={(e) => changeSelectableFilters('email', e.target.value)}
-                  />
-                  <span>Все</span>
-                </label>
+                <RadioInput
+                  name="radio"
+                  value="true"
+                  checked={selectableFilters.email == "true" ? true : false}
+                  onChange={(e) =>
+                    changeSelectableFilters("email", e.target.value)
+                  }
+                  label="Да"
+                />
+                <RadioInput
+                  name="radio"
+                  value="false"
+                  checked={selectableFilters.email == "false" ? true : false}
+                  onChange={(e) =>
+                    changeSelectableFilters("email", e.target.value)
+                  }
+                  label="Нет"
+                />
+                <RadioInput
+                  name="radio"
+                  value="all"
+                  checked={
+                    selectableFilters.email == "all" ||
+                    selectableFilters.email === undefined
+                      ? true
+                      : false
+                  }
+                  onChange={(e) =>
+                    changeSelectableFilters("email", e.target.value)
+                  }
+                  label="Все"
+                />
               </div>
             </div>
           </div>

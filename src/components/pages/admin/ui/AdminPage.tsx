@@ -1,21 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { RightMenu } from './RightMenu';
+import { RightMenu } from "./RightMenu";
 
-import classes from './AdminPage.module.css';
-import { Table } from './TableComponent';
-import { TPreferMockData, TEmployee, TManagament, TMockData, mockData } from '../mockData';
-import { MultiValue, SingleValue } from 'react-select';
-import { useRouter } from 'next/router';
-import { objectEmptyFilter } from '@/utils/objectFilter';
-import { resolve } from 'path';
-import { preferMockData } from './preferMockData';
-import Loader from '@/shared/ui/Loader';
+import classes from "./AdminPage.module.css";
+import { Table } from "./TableComponent";
+import {
+  TPreferMockData,
+  TEmployee,
+  TManagament,
+  TMockData,
+  mockData,
+} from "../mockData";
+import { MultiValue } from "react-select";
+import { useRouter } from "next/router";
+import { objectEmptyFilter } from "@/utils/objectFilter";
+import { preferMockData } from "./preferMockData";
+import Loader from "@/shared/ui/Loader";
 
-export type SelectOption = {
-  label: string;
-  value: string;
-};
 export type TSelectableFilters = {
   managament?: MultiValue<TManagament>;
   employee?: MultiValue<TEmployee>;
@@ -30,13 +31,19 @@ export type TSelectedFilters = {
   email?: string;
 };
 
+export type TChangeSelectableFilters = (
+  objKey: keyof TSelectableFilters,
+  arg: MultiValue<TManagament> | MultiValue<TEmployee> | string
+) => void;
+
 export const AdminPage = () => {
   const router = useRouter();
 
   const [convertedMockData, setConvertedMockData] = useState<TPreferMockData>();
-  const [selectableFilters, setSelectableFilters] = useState<TSelectableFilters>({});
+  const [selectableFilters, setSelectableFilters] =
+    useState<TSelectableFilters>({});
   const [selectedFilters, setSelectedFilters] = useState<TSelectedFilters>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (router.isReady) {
@@ -46,17 +53,18 @@ export const AdminPage = () => {
         managament:
           Array.isArray(managament) && managament.length > 0
             ? managament.map((item) => Number(item))
-            : typeof managament === 'string'
+            : typeof managament === "string"
             ? [Number(managament)]
             : undefined,
         employee:
           Array.isArray(employee) && employee.length > 0
             ? employee.map((item) => Number(item))
-            : typeof employee === 'string'
+            : typeof employee === "string"
             ? [Number(employee)]
             : undefined,
-        registration: typeof registration === 'string' ? registration : undefined,
-        email: typeof email === 'string' ? email : undefined,
+        registration:
+          typeof registration === "string" ? registration : undefined,
+        email: typeof email === "string" ? email : undefined,
       };
       setSelectedFilters(formDataSelected);
 
@@ -77,35 +85,29 @@ export const AdminPage = () => {
         const data = preferMockData(mock as TMockData[]);
         setConvertedMockData(data);
 
-        const { managament, employee } = router.query;
+        const { managament, employee } = selectedFilters;
+
         setSelectableFilters((prev) => ({
           ...prev,
           managament:
-            typeof managament !== undefined
+            managament !== undefined
               ? data.ManagamentList.filter((item) =>
-                  Array.isArray(managament)
-                    ? managament.some((v) => v === String(item.managamentId))
-                    : item.managamentId === Number(managament),
+                  managament.some((v) => v === item.managamentId)
                 )
               : undefined,
           employee:
-            typeof employee !== undefined
+            employee !== undefined
               ? data.EmployeeList.filter((item) =>
-                  Array.isArray(employee)
-                    ? employee.some((v) => v === String(item.employeeId))
-                    : item.employeeId === Number(employee),
+                  employee.some((v) => v === item.employeeId)
                 )
               : undefined,
         }));
         setIsLoading(false);
       });
     }
-  }, [router.isReady, router.query]);
+  }, [selectedFilters, router.isReady]);
 
-  const changeSelectableFilters = (
-    objKey: keyof TSelectableFilters,
-    arg: SingleValue<SelectOption> | MultiValue<TManagament> | MultiValue<TEmployee> | string,
-  ) => {
+  const changeSelectableFilters: TChangeSelectableFilters = (objKey, arg) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
   };
 
@@ -119,13 +121,15 @@ export const AdminPage = () => {
         },
       },
       undefined,
-      { shallow: true },
+      { shallow: true }
     );
   };
 
   const applyFilterFunction = () => {
     const formData = {
-      managament: selectableFilters.managament?.map((item) => item.managamentId),
+      managament: selectableFilters.managament?.map(
+        (item) => item.managamentId
+      ),
       employee: selectableFilters.employee?.map((item) => item.employeeId),
       registration: selectableFilters.registration,
       email: selectableFilters.email,
@@ -146,7 +150,10 @@ export const AdminPage = () => {
       ) : (
         <>
           <div className={classes.adminPageTable}>
-            <Table selectedFilters={selectedFilters} preferMockData={convertedMockData} />
+            <Table
+              selectedFilters={selectedFilters}
+              preferMockData={convertedMockData}
+            />
           </div>
           <RightMenu
             selectableFilters={selectableFilters}

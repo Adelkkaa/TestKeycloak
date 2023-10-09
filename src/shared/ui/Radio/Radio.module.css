@@ -1,0 +1,27 @@
+.radioLabel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 31px;
+  background-color: var(--aispp-color-white-dark);
+  border-radius: 10px;
+  padding: 0px 35px 0px 11px;
+  cursor: pointer;
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.radioLabel:hover {
+  color: var(--aispp-color-blue);
+}
+
+.radioLabel .radioInput {
+  width: 20px;
+  height: 20px;
+}
+
+.radioLabel .radioInput:checked ~ * {
+  color: var(--aispp-color-blue);
+}
