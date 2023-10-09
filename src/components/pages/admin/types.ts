@@ -1,4 +1,6 @@
-export type TMockData = {
+import { TSelectableFilters } from './ui/AdminPage';
+
+export type TAdminData = {
   id: number;
   employee: {
     employeeId: number;
@@ -24,16 +26,14 @@ export type TEmployee = {
   employeePatronymic: string;
 };
 
-export type TPreferMockData = {
-  List: TMockData[];
+export type TPreferAdminData = {
+  List: TAdminData[];
   ManagamentList: TManagament[];
   EmployeeList: TEmployee[];
 };
 
 export type TRadioArray = {
-  name: string;
+  name: keyof TSelectableFilters;
   value: string;
-  checked: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
 };

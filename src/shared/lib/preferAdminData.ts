@@ -1,8 +1,13 @@
-import { TPreferMockData, TEmployee, TManagament, TMockData } from '../mockData';
+import {
+  TEmployee,
+  TManagament,
+  TAdminData,
+  TPreferAdminData,
+} from '../../components/pages/admin/types';
 
-type PreferMockData = (array: TMockData[]) => TPreferMockData;
+type PreferAdminData = (array: TAdminData[]) => TPreferAdminData;
 
-export const preferMockData: PreferMockData = (array) => {
+export const preferAdminData: PreferAdminData = (array) => {
   const managamentList: TManagament[] = [];
   const employeeList: TEmployee[] = [];
 

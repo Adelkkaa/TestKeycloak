@@ -1,46 +1,35 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react';
 
-import { Button } from "@/shared/ui/Button";
-import { ResetIcon } from "../../icons/ResetIcon";
-import { ApplyIcon } from "../../icons/ApplyIcon";
+import { Button } from '@/shared/ui/Button';
+import { ResetIcon } from '../../icons/ResetIcon';
+import { ApplyIcon } from '../../icons/ApplyIcon';
 
-import classes from "./RightMenu.module.css";
-import clsx from "clsx";
-import Select from "react-select";
-import {
-  TPreferMockData,
-  TEmployee,
-  TManagament,
-  TRadioArray,
-} from "../../mockData";
-import { TChangeSelectableFilters, TSelectableFilters } from "../AdminPage";
-import { RadioArray } from "@/shared/ui/RadioArray";
+import classes from './RightMenu.module.css';
+import clsx from 'clsx';
+import Select from 'react-select';
+import { TPreferAdminData, TEmployee, TManagament, TRadioArray } from '../../types';
+import { TChangeSelectableFilters, TSelectableFilters } from '../AdminPage';
+import { RadioComponent } from '@/shared/ui/RadioComponent';
 
 const selectClassNames = {
-  control: () => "AISPP_selectBlock__input",
-  menu: () => "AISPP_selectBlock__options",
-  menuList: () => "AISPP_selectBlock__optionsList",
-  singleValue: () => "AISPP_selectBlock__singleValue",
-  valueContainer: () => "AISPP_selectBlock__valueContainer",
-  placeholder: () => "AISPP_selectBlock__placeholder",
-  input: () => "AISPP_selectBlock__input_field",
-  option: ({
-    isSelected,
-    isFocused,
-  }: {
-    isSelected: boolean;
-    isFocused: boolean;
-  }) =>
+  control: () => 'AISPP_selectBlock__input',
+  menu: () => 'AISPP_selectBlock__options',
+  menuList: () => 'AISPP_selectBlock__optionsList',
+  singleValue: () => 'AISPP_selectBlock__singleValue',
+  valueContainer: () => 'AISPP_selectBlock__valueContainer',
+  placeholder: () => 'AISPP_selectBlock__placeholder',
+  input: () => 'AISPP_selectBlock__input_field',
+  option: ({ isSelected, isFocused }: { isSelected: boolean; isFocused: boolean }) =>
     clsx(
-      "AISPP_selectBlock__optionsItem",
-      isSelected && "AISPP_selectBlock__optionsItemActive",
-      isFocused && "AISPP_selectBlock__optionsItemFocus"
+      'AISPP_selectBlock__optionsItem',
+      isSelected && 'AISPP_selectBlock__optionsItemActive',
+      isFocused && 'AISPP_selectBlock__optionsItemFocus',
     ),
 };
 
 type RightMenuProps = {
   selectableFilters: TSelectableFilters;
-  preferMockData: TPreferMockData | undefined;
+  preferedAdminData: TPreferAdminData | undefined;
   changeSelectableFilters: TChangeSelectableFilters;
   onApplyFilterFunction: () => void;
   onClearFilterFunction: () => void;
@@ -50,75 +39,55 @@ export const RightMenu: FC<RightMenuProps> = ({
   changeSelectableFilters,
   onApplyFilterFunction,
   onClearFilterFunction,
-  preferMockData,
+  preferedAdminData,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const registrationData: TRadioArray[] = [
     {
-      name: "radioRegistr",
-      value: "true",
-      checked: selectableFilters.registration == "true" ? true : false,
-      onChange: (e) => changeSelectableFilters("registration", e.target.value),
-      label: "Да",
+      name: 'registration',
+      value: 'true',
+      label: 'Да',
     },
     {
-      name: "radioRegistr",
-      value: "false",
-      checked: selectableFilters.registration == "false" ? true : false,
-      onChange: (e) => changeSelectableFilters("registration", e.target.value),
-      label: "Нет",
+      name: 'registration',
+      value: 'false',
+      label: 'Нет',
     },
     {
-      name: "radioRegistr",
-      value: "all",
-      checked:
-        selectableFilters.registration == "all" ||
-        selectableFilters.registration == undefined
-          ? true
-          : false,
-      onChange: (e) => changeSelectableFilters("registration", e.target.value),
-      label: "Все",
+      name: 'registration',
+      value: 'all',
+      label: 'Все',
     },
   ];
 
   const emailData: TRadioArray[] = [
     {
-      name: "radio",
-      value: "true",
-      checked: selectableFilters.email == "true" ? true : false,
-      onChange: (e) => changeSelectableFilters("email", e.target.value),
-      label: "Да",
+      name: 'email',
+      value: 'true',
+      label: 'Да',
     },
     {
-      name: "radio",
-      value: "false",
-      checked: selectableFilters.email == "false" ? true : false,
-      onChange: (e) => changeSelectableFilters("email", e.target.value),
-      label: "Нет",
+      name: 'email',
+      value: 'false',
+      label: 'Нет',
     },
     {
-      name: "radio",
-      value: "all",
-      checked:
-        selectableFilters.email == "all" ||
-        selectableFilters.email === undefined
-          ? true
-          : false,
-      onChange: (e) => changeSelectableFilters("email", e.target.value),
-      label: "Все",
+      name: 'email',
+      value: 'all',
+      label: 'Все',
     },
   ];
 
   return (
     <div
       className={clsx(classes.rightMenu, {
-        [classes["rightMenu-open"]]: isOpen,
+        [classes['rightMenu-open']]: isOpen,
       })}
     >
       <div
         className={clsx(classes.caret, {
-          [classes["caret-open"]]: isOpen,
+          [classes['caret-open']]: isOpen,
         })}
         onClick={() => setIsOpen((prev) => !prev)}
       ></div>
@@ -134,17 +103,13 @@ export const RightMenu: FC<RightMenuProps> = ({
                   instanceId="managamentId"
                   isMulti
                   placeholder="Выберите управление"
-                  options={preferMockData?.ManagamentList}
-                  getOptionLabel={(option: TManagament) =>
-                    option.managamentName
-                  }
-                  getOptionValue={(option: TManagament) =>
-                    String(option.managamentId)
-                  }
+                  options={preferedAdminData?.ManagamentList}
+                  getOptionLabel={(option: TManagament) => option.managamentName}
+                  getOptionValue={(option: TManagament) => String(option.managamentId)}
                   value={selectableFilters.managament || []}
-                  noOptionsMessage={() => "Ничего не выбрано"}
+                  noOptionsMessage={() => 'Ничего не выбрано'}
                   onChange={(value) => {
-                    changeSelectableFilters("managament", value);
+                    changeSelectableFilters('managament', value);
                   }}
                   classNames={selectClassNames}
                   closeMenuOnSelect={false}
@@ -161,17 +126,15 @@ export const RightMenu: FC<RightMenuProps> = ({
                   instanceId="employee"
                   isMulti
                   placeholder="Выберите фамилию сотрудника"
-                  options={preferMockData?.EmployeeList}
+                  options={preferedAdminData?.EmployeeList}
                   getOptionLabel={(option: TEmployee) =>
                     `${option.employeeSurname} ${option.employeeName} ${option.employeePatronymic}`
                   }
-                  getOptionValue={(option: TEmployee) =>
-                    String(option.employeeId)
-                  }
+                  getOptionValue={(option: TEmployee) => String(option.employeeId)}
                   value={selectableFilters.employee || []}
-                  noOptionsMessage={() => "Ничего не выбрано"}
+                  noOptionsMessage={() => 'Ничего не выбрано'}
                   onChange={(value) => {
-                    changeSelectableFilters("employee", value);
+                    changeSelectableFilters('employee', value);
                   }}
                   classNames={selectClassNames}
                   closeMenuOnSelect={false}
@@ -181,12 +144,20 @@ export const RightMenu: FC<RightMenuProps> = ({
 
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Регистрация</p>
-              <RadioArray array={registrationData} />
+              <RadioComponent
+                selectableFilters={selectableFilters}
+                array={registrationData}
+                changeSelectableFilters={changeSelectableFilters}
+              />
             </div>
 
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Email</p>
-              <RadioArray array={emailData} />
+              <RadioComponent
+                selectableFilters={selectableFilters}
+                array={emailData}
+                changeSelectableFilters={changeSelectableFilters}
+              />
             </div>
           </div>
 

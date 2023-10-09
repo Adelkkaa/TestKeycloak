@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import React, { FC, PropsWithChildren, TdHTMLAttributes } from "react";
+import clsx from 'clsx';
+import React, { FC, PropsWithChildren, TdHTMLAttributes } from 'react';
 
-import classes from "./TableComponent.module.css";
-import { Checkbox } from "@/shared/ui/Checkbox";
-import { TSelectedFilters } from "../AdminPage";
-import { TPreferMockData } from "../../mockData";
+import classes from './TableComponent.module.css';
+import { Checkbox } from '@/shared/ui/Checkbox';
+import { TSelectedFilters } from '../AdminPage';
+import { TPreferAdminData } from '../../types';
 
 type AdminCellProps = TdHTMLAttributes<HTMLTableCellElement>;
 const AdminCell = (props: PropsWithChildren<AdminCellProps>) => {
@@ -18,37 +18,32 @@ const AdminCell = (props: PropsWithChildren<AdminCellProps>) => {
 
 type TableProps = {
   selectedFilters: TSelectedFilters;
-  preferMockData?: TPreferMockData;
+  preferedAdminData?: TPreferAdminData;
 };
 
-export const Table: FC<TableProps> = ({ selectedFilters, preferMockData }) => {
-  const filterTableData = preferMockData?.List.filter((v) =>
+export const Table: FC<TableProps> = ({ selectedFilters, preferedAdminData }) => {
+  const filterTableData = preferedAdminData?.List.filter((v) =>
     Object.keys(selectedFilters).length
       ? (selectedFilters.employee && selectedFilters.employee.length > 0
-          ? selectedFilters?.employee?.some(
-              (item) => item === v.employee.employeeId
-            )
+          ? selectedFilters?.employee?.some((item) => item === v.employee.employeeId)
           : true) &&
         (selectedFilters.managament && selectedFilters.managament.length
-          ? selectedFilters.managament.some(
-              (item) => item === v.managament.managamentId
-            )
+          ? selectedFilters.managament.some((item) => item === v.managament.managamentId)
           : true) &&
-        (selectedFilters.registration &&
-        Object.keys(selectedFilters.registration).length
-          ? (selectedFilters.registration == "true" && v.isRegistr) ||
-            (selectedFilters.registration == "false" && !v.isRegistr) ||
-            selectedFilters.registration === "all"
+        (selectedFilters.registration && Object.keys(selectedFilters.registration).length
+          ? (selectedFilters.registration == 'true' && v.isRegistr) ||
+            (selectedFilters.registration == 'false' && !v.isRegistr) ||
+            selectedFilters.registration === 'all'
           : true) &&
         (selectedFilters.email && Object.keys(selectedFilters.email).length
-          ? (selectedFilters.email == "true" && !!v.email) ||
-            (selectedFilters.email == "false" && !!!v.email) ||
-            selectedFilters.email === "all"
+          ? (selectedFilters.email == 'true' && !!v.email) ||
+            (selectedFilters.email == 'false' && !!!v.email) ||
+            selectedFilters.email === 'all'
           : true)
-      : true
+      : true,
   );
   return (
-    <table className={clsx("AISPP_UI_table", classes.adminTableBlock)}>
+    <table className={clsx('AISPP_UI_table', classes.adminTableBlock)}>
       <thead className="AISPP_UI_table_thead">
         <tr className="AISPP_UI_table_tr">
           <AdminCell>ID</AdminCell>
@@ -60,9 +55,7 @@ export const Table: FC<TableProps> = ({ selectedFilters, preferMockData }) => {
           <AdminCell>Отправить письмо</AdminCell>
         </tr>
       </thead>
-      <tbody
-        className={clsx("AISPP_UI_table_tbody", classes.adminTableBlock_body)}
-      >
+      <tbody className={clsx('AISPP_UI_table_tbody', classes.adminTableBlock_body)}>
         {!filterTableData?.length ? (
           <tr className="AISPP_UI_emptyTable_tr">
             <AdminCell colSpan={10}>Ничего не найдено...</AdminCell>
