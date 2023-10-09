@@ -121,6 +121,7 @@ export const RightMenu: FC<RightMenuProps> = ({
             <div className={classes.filters__item}>
               <p className={classes.filters__title}>Регистрация</p>
               <div className={classes.filters__radio}>
+                {/*  Исправил */}
                 <RadioInput
                   name="radioRegistr"
                   value="true"

@@ -84,7 +84,7 @@ export const AdminPage = () => {
       }).then((mock) => {
         const data = preferMockData(mock as TMockData[]);
         setConvertedMockData(data);
-
+        // Исправил
         const { managament, employee } = selectedFilters;
 
         setSelectableFilters((prev) => ({
