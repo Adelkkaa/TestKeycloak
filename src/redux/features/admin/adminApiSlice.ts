@@ -1,15 +1,12 @@
-import { TMockData, TPreferMockData } from "@/components/pages/admin/mockData";
-import { apiSlice } from "../api/apiSlice";
-import { preferMockData } from "@/components/pages/admin/ui/preferMockData";
+import { TAdminData, TPreferAdminData } from '@/components/pages/admin/types';
+import { apiSlice } from '../api/apiSlice';
+import { preferAdminData } from '@/shared/lib/preferAdminData';
 
 const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAdminTableAllInfo: builder.query<TPreferMockData, void>({
-      query: () => "/adminTableData",
-      transformResponse: (response: TMockData[]) => {
-        const data = preferMockData(response);
-        return data;
-      },
+    getAdminTableAllInfo: builder.query<TPreferAdminData, void>({
+      query: () => '/adminTableData',
+      transformResponse: (response: TAdminData[]) => preferAdminData(response),
     }),
   }),
 });

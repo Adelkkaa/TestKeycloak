@@ -4,7 +4,7 @@ import { RightMenu } from "./RightMenu";
 
 import classes from "./AdminPage.module.css";
 import { Table } from "./TableComponent";
-import { TEmployee, TManagament } from "../mockData";
+import { TEmployee, TManagament } from "../types";
 import { MultiValue } from "react-select";
 import { useRouter } from "next/router";
 import { objectEmptyFilter } from "@/utils/objectFilter";
@@ -37,7 +37,7 @@ export const AdminPage = () => {
     useState<TSelectableFilters>({});
   const [selectedFilters, setSelectedFilters] = useState<TSelectedFilters>({});
   const {
-    data: convertedMockData,
+    data: preferedAdminData,
     isLoading,
     isFetching,
     isSuccess,
@@ -85,27 +85,27 @@ export const AdminPage = () => {
   }, [router.isReady]);
 
   useEffect(() => {
-    if (convertedMockData && router.isReady) {
+    if (preferedAdminData && router.isReady && isSuccess) {
       setSelectableFilters((prev) => {
         const { managament, employee } = prev;
         return {
           ...prev,
           managament:
             managament !== undefined
-              ? convertedMockData.ManagamentList.filter((item) =>
+              ? preferedAdminData.ManagamentList.filter((item) =>
                   managament.some((v) => v.managamentId === item.managamentId)
                 )
               : undefined,
           employee:
             employee !== undefined
-              ? convertedMockData.EmployeeList.filter((item) =>
+              ? preferedAdminData.EmployeeList.filter((item) =>
                   employee.some((v) => v.employeeId === item.employeeId)
                 )
               : undefined,
         };
       });
     }
-  }, [convertedMockData, router.isReady]);
+  }, [preferedAdminData, router.isReady, isSuccess]);
 
   const changeSelectableFilters: TChangeSelectableFilters = (objKey, arg) => {
     setSelectableFilters((prev) => ({ ...prev, [objKey]: arg }));
@@ -153,7 +153,7 @@ export const AdminPage = () => {
             <div className={classes.adminPageTable}>
               <Table
                 selectedFilters={selectedFilters}
-                preferMockData={convertedMockData}
+                preferedAdminData={preferedAdminData}
               />
             </div>
             <RightMenu
@@ -161,7 +161,7 @@ export const AdminPage = () => {
               changeSelectableFilters={changeSelectableFilters}
               onApplyFilterFunction={applyFilterFunction}
               onClearFilterFunction={clearFilterFunction}
-              preferMockData={convertedMockData}
+              preferedAdminData={preferedAdminData}
             />
           </>
         )
