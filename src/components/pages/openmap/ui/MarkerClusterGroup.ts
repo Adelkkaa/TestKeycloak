@@ -14,7 +14,6 @@ const MarkerClusterGroup = createPathComponent(
         : (clusterProps[propName] = prop)
     );
 
-    // Creating markerClusterGroup Leaflet element
     const markerClusterGroup = L.markerClusterGroup(clusterProps);
 
     // Initializing event listeners

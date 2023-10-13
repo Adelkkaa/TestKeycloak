@@ -1,0 +1,45 @@
+.legend {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 400;
+
+  display: flex;
+  padding: 6px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.imageWithBg {
+  width: 30px;
+  height: 30px;
+  background-image: url("../icon/cam.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legendDescription {
+  color: #333;
+  font-size: 16px;
+  font-weight: 400;
+}
+.number {
+  font-size: 10px;
+  font-weight: 600;
+}

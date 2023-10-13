@@ -300,11 +300,24 @@
 .leaflet-container {
   width: 100%;
   height: 100%;
+  border-radius: 20px;
   z-index: 1;
 }
 
 .leaflet-bottom .leaflet-control {
   display: none;
+}
+
+.custom-marker-icon {
+  width: 50px !important;
+  height: 50px !important;
+  background-image: url("../components/pages/openmap/icon/cam.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .marker-cluster-large,
@@ -315,7 +328,7 @@
   margin-top: -25px !important;
   margin-left: -25px !important;
   background-color: transparent;
-  background-image: url("../components/pages/openmap/icon/cam_2.svg");
+  background-image: url("../components/pages/openmap/icon/cam.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
