@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 
 import classes from "./Map.module.css";
@@ -8,8 +8,17 @@ import { CustomMarker } from "./CustomMarker";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import { coords, images } from "../mockData";
 import { Legend } from "./Legend";
+import Portal from "@/shared/ui/Portal/ui/Portal";
+
+export type PortalData = {
+  id: number;
+  x: number;
+  y: number;
+};
 
 const Map = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [portalData, setPortalData] = useState<PortalData>();
   return (
     <>
       <div className={classes.map}>
@@ -22,26 +31,35 @@ const Map = () => {
             {coords.map((item) => (
               <CustomMarker
                 key={item.id}
+                id={item.id}
                 x={item.x}
                 y={item.y}
-                rotate={item.rotate}
+                rotate={item.rotate || NaN}
+                setIsModalOpen={setIsModalOpen}
+                setPortalData={setPortalData}
               >
-                <Popup className="leaflet-customPopup">
-                  {item.x}
-
+                {/* <Popup className="leaflet-customPopup">
                   <Image
                     src={images[item.id]}
                     alt="cake"
                     width={100}
                     height={100}
                   />
-                </Popup>
+                </Popup> */}
               </CustomMarker>
             ))}
           </MarkerClusterGroup>
           <Legend />
         </MapContainer>
       </div>
+      {isModalOpen && portalData && (
+        <Portal
+          x={portalData.x}
+          y={portalData.y}
+          id={portalData.id}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </>
   );
 };
