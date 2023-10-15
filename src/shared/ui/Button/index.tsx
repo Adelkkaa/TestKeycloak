@@ -1,7 +1,7 @@
-import clsx from "clsx";
-import React, { ReactNode } from "react";
+import clsx from 'clsx';
+import React, { ReactNode } from 'react';
 
-import classes from "./Button.module.css";
+import classes from './Button.module.css';
 
 type ButtonProps = {
   className?: string;
@@ -17,9 +17,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={clsx(classes.button, { [classes.buttonDisabled]: disabled }, [
-        className,
-      ])}
+      className={clsx(classes.button, { [classes.buttonDisabled]: disabled }, [className])}
       disabled={disabled}
       {...otherProps}
     >
