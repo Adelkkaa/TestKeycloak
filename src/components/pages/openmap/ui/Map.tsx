@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 
 import classes from "./Map.module.css";
 
-import Image from "next/image";
 import { CustomMarker } from "./CustomMarker";
 import MarkerClusterGroup from "./MarkerClusterGroup";
-import { coords, images } from "../mockData";
+import { coords } from "../mockData";
 import { Legend } from "./Legend";
 import Portal from "@/shared/ui/Portal/ui/Portal";
 
@@ -37,16 +36,7 @@ const Map = () => {
                 rotate={item.rotate || NaN}
                 setIsModalOpen={setIsModalOpen}
                 setPortalData={setPortalData}
-              >
-                {/* <Popup className="leaflet-customPopup">
-                  <Image
-                    src={images[item.id]}
-                    alt="cake"
-                    width={100}
-                    height={100}
-                  />
-                </Popup> */}
-              </CustomMarker>
+              />
             ))}
           </MarkerClusterGroup>
           <Legend />
